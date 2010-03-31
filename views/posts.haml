@@ -2,8 +2,9 @@
 
 #content
   - @posts.each do |post|
-    %div{:id => "post_#{post.file}"}
+    %div[post]
       %h3= post.meta[:title]
+      .date= post.date
       .body
         = post.body
 

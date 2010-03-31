@@ -2,11 +2,18 @@ require 'rubygems'
 require 'sinatra'
 require 'rdiscount'
 require 'haml'
-#require 'bundler'
-#Bundler.setup
-#Bundler.require
 
+# Post model
 require 'post'
+
+# Helpers
+helpers do
+  def stylesheet(name, media = 'all')
+    Array(name).map do |sheet|
+      %Q{<link rel="stylesheet" type="text/css" href="/stylesheets/#{sheet}.css" media="#{media}" />}
+    end.join("\n")
+  end
+end
 
 # Get all posts
 get '/' do

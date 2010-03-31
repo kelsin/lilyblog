@@ -1,0 +1,5 @@
+#tag_cloud { line-height: 1.5em; }
+#tag_cloud span.large { font-size: 1.5em; }
+#tag_cloud span.medium { font-size: 1.1em; }
+#tag_cloud span.small { font-size: 0.8em; }
+#tag_cloud span.tiny { font-size: 0.6em; }

@@ -2,6 +2,12 @@
 %html
   %head
     %title= @title || "LilyBlog"
+    = stylesheet [:reset, :tags]
   %body
     %h1= @title || "LilyBlog"
     = yield
+    #tag_cloud
+      - Post.tags.each do |tag, amount|
+        %span.tag{ :class => Post.tag_class(tag) }
+          = tag
+
