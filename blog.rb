@@ -17,12 +17,14 @@ end
 
 # Single Post
 get '/posts/:id' do
+  cache_control :public, :max_age => 2592000
   @post = Post.find(params[:id])
   haml :post
 end
 
 # Get all posts
 get '/' do
+  cache_control :public, :max_age => 2592000
   @posts = Post.all
   haml :posts
 end
