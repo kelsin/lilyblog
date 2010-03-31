@@ -4,7 +4,8 @@
     %title= @title || "LilyBlog"
     = stylesheet [:reset, :tags]
   %body
-    %h1= @title || "LilyBlog"
+    %h1
+      %a{ :href => '/' }= @title || "LilyBlog"
     = yield
     #tag_cloud
       - Post.tags.each do |tag, amount|

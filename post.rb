@@ -5,6 +5,10 @@ class Post
     Dir.glob(File.join('posts','*.post')).map { |p| Post.new(p) }
   end
 
+  def self.find(id)
+    Post.new(File.join('posts',"#{id}.post"))
+  end
+
   def initialize(file)
     @file = file
     File.open(file, 'r') do |file|

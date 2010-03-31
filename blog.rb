@@ -15,6 +15,12 @@ helpers do
   end
 end
 
+# Single Post
+get '/posts/:id' do
+  @post = Post.find(params[:id])
+  haml :post
+end
+
 # Get all posts
 get '/' do
   @posts = Post.all
