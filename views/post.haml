@@ -1,8 +1,2 @@
-%h2= @post.title
-
-#content
-  %div[@post]
-    .date= @post.date
-    .body
-      = @post.body
+= render_posts(@post)
 

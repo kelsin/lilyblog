@@ -6,7 +6,8 @@
   %body
     %h1
       %a{ :href => '/' }= @title || "LilyBlog"
-    = yield
+    #content
+      = yield
     #tag_cloud
       %h4 Tags
       %ul.tags

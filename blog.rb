@@ -15,6 +15,12 @@ end
 
 # Helpers
 helpers do
+  def render_posts(p)
+    Array(p).map do |post|
+      haml :_post, :locals => { :post => post }, :layout => false
+    end.join("\n")
+  end
+
   def stylesheet(name, media = 'all')
     Array(name).map do |sheet|
       %Q{<link rel="stylesheet" type="text/css" href="/stylesheets/#{sheet}.css" media="#{media}" />}
