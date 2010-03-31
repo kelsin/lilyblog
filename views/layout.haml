@@ -8,6 +8,7 @@
       %a{ :href => '/' }= @title || "LilyBlog"
     = yield
     #tag_cloud
+      %h4 Tags
       - Post.tags.each do |tag, amount|
         %span.tag{ :class => Post.tag_class(tag) }
           = tag
