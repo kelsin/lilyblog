@@ -6,6 +6,13 @@ require 'haml'
 # Post model
 require 'post'
 
+# Filters
+before do
+  @tags = Post.tags.sort do |a,b|
+    a[0].to_s <=> b[0].to_s
+  end
+end
+
 # Helpers
 helpers do
   def stylesheet(name, media = 'all')

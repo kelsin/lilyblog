@@ -10,7 +10,7 @@
     #tag_cloud
       %h4 Tags
       %ul.tags
-        - Post.tags.each do |tag, amount|
+        - @tags.each do |tag, amount|
           %li{ :class => class_for_tag(tag) }
             %a{ :href => "/tags/#{tag}" }= tag
 
