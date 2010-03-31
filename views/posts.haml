@@ -1,0 +1,9 @@
+%h2 Posts
+
+#content
+  - @posts.each do |post|
+    %div{:id => "post_#{post.file}"}
+      %h3= post.meta[:title]
+      .body
+        = post.body
+
