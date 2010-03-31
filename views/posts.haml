@@ -1,4 +1,8 @@
-%h2 Posts
+%h2 
+  - if @tag
+    == Posts tagged by #{@tag}
+  - else
+    Posts
 
 #content
   - @posts.each do |post|

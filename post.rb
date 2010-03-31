@@ -9,6 +9,45 @@ class Post
     Post.new(File.join('posts',"#{id}.post"))
   end
 
+  def self.find_by_tag(tag)
+    Post.all.select do |post|
+      post.tags.member? tag
+    end
+  end
+
+  def self.tag(tag)
+    self.tags[tag].to_f / number_of_tags
+  end
+
+  def self.tags
+    return @counts if @counts
+
+    @counts = {}
+
+    Post.all.map do |p|
+      p.tags.each do |tag|
+        @counts[tag] ||= 0
+        @counts[tag] += 1
+      end
+    end
+
+    return @counts
+  end
+
+  def self.number_of_tags
+    total = 0
+
+    self.tags.each do |tag, amount|
+      total += amount
+    end
+
+    return total.to_f
+  end
+
+  def self.clean_tag(tag)
+    tag.strip.gsub(/[^0-9a-zA-Z_]+/, '_').downcase.to_sym
+  end
+
   def initialize(file)
     @file = file
     File.open(file, 'r') do |file|
@@ -34,41 +73,9 @@ class Post
     @meta[:title]
   end
 
-  def self.tag(tag)
-    self.tags[tag].to_f / number_of_tags
-  end
-
-  def self.tags
-    return @counts if @counts
-
-    @counts = {}
-
-    Post.all.map do |p|
-      p.tags.each do |tag|
-        @counts[tag] ||= 0
-        @counts[tag] += 1
-      end
-    end
-
-    return @counts
-  end
-
   def tags
     @meta[:tags].split(',').map do |tag|
-      tag.strip.gsub(/[^0-9a-zA-Z_]+/, '_').downcase.to_sym
-    end
-  end
-
-  def self.tag_class(tag)
-    case self.tag(tag)
-    when 0.0...0.1
-      'tiny'
-    when 0.1...0.25
-      'small'
-    when 0.25...0.5
-      'medium'
-    when 0.5..1.0
-      'large'
+      Post.clean_tag(tag)
     end
   end
 
@@ -79,13 +86,4 @@ class Post
 
   private
 
-  def self.number_of_tags
-    total = 0
-
-    self.tags.each do |tag, amount|
-      total += amount
-    end
-
-    return total.to_f
-  end
 end

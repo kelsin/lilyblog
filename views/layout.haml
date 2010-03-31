@@ -9,7 +9,8 @@
     = yield
     #tag_cloud
       %h4 Tags
-      - Post.tags.each do |tag, amount|
-        %span.tag{ :class => Post.tag_class(tag) }
-          = tag
+      %ul.tags
+        - Post.tags.each do |tag, amount|
+          %li{ :class => class_for_tag(tag) }
+            %a{ :href => "/tags/#{tag}" }= tag
 
