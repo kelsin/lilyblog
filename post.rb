@@ -23,7 +23,7 @@ class Post
   end
 
   def date
-    File.mtime @file
+    Time.parse(@meta[:date])
   end
 
   def to_s
