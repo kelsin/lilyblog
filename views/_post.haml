@@ -1,6 +1,6 @@
 %div[post]
   %h3
-    %a{ :href => "/posts/#{post.id}" }= post.meta[:title]
+    %a{ :href => post_url(post) }= post.meta[:title]
   .date= post.date
   .body
     = post.body

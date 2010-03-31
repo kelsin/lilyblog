@@ -13,5 +13,5 @@
       %ul.tags
         - @tags.each do |tag, amount|
           %li{ :class => class_for_tag(tag) }
-            %a{ :href => "/tags/#{tag}" }= tag
+            %a{ :href => tag_url(tag) }= tag
 

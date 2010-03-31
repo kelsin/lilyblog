@@ -2,17 +2,21 @@ class Post
   attr_reader :body, :meta, :file
 
   def self.all
-    Dir.glob(File.join('posts','*.post')).map { |p| Post.new(p) }
+    Dir.glob(File.join('posts','*','*.post')).map { |p| Post.new(p) }.sort
   end
 
-  def self.find(id)
-    Post.new(File.join('posts',"#{id}.post"))
+  def self.find_by_category(category)
+    Dir.glob(File.join('posts', "#{category}",'*.post')).map { |p| Post.new(p) }.sort
   end
 
   def self.find_by_tag(tag)
     Post.all.select do |post|
       post.tags.member? tag
-    end
+    end.sort
+  end
+
+  def self.find(params)
+    Post.new(Dir.glob(File.join('posts','*',"#{params[:year]}#{params[:month]}#{params[:day]}_#{params[:slug].gsub(/-/,'_')}.post")).first)
   end
 
   def self.tag(tag)
@@ -62,11 +66,7 @@ class Post
   end
 
   def id
-    File.basename @file, '.post'
-  end
-
-  def date
-    Time.parse(@meta[:date])
+    basename
   end
 
   def to_s
@@ -84,6 +84,19 @@ class Post
     raise NoMethodError
   end
 
-  private
+  def basename
+    File.basename(self.file, '.post')
+  end
 
+  def slug
+    basename.split('_', 2)[1]
+  end
+
+  def date
+    Date.parse(basename.split('_', 2)[0])
+  end
+
+  def <=>(other)
+    self.basename <=> other.basename
+  end
 end

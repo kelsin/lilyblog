@@ -5,4 +5,14 @@
     Posts
 
 #posts.posts
-  = render_posts(@posts)
+  = partial :post, @posts[limit]
+
+- if page > 1 or (limit.max + 1) < @posts.size
+  %ul.pages
+    - if page > 1
+      %li
+        %a{ :href => page_url(page - 1) } Prev Page
+    - if (limit.max + 1) < @posts.size
+      %li
+        %a{ :href => page_url(page + 1) } Next Page
+
