@@ -1,5 +1,0 @@
-title: Install Mutt in Mac OS X
-tags: email, apple, mutt
-date: 2009-05-27 10:51:10 -04:00
----
-sudo port install mutt-devel +imap +idn +ssl +sasl +gnuregex +headercache +gdbm +deepif +sidebar

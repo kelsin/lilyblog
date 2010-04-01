@@ -82,7 +82,7 @@ class Post
   def initialize(file)
     @file = file
     File.open(file, 'r') do |file|
-      data,@body = file.read.split('---', 2).map { |section| section.strip }
+      data,@body = file.read.split(/\n(---)?\n/, 2)
 
       @meta = {}
       YAML::load(data).each do |key, val|
@@ -92,8 +92,8 @@ class Post
   end
 
   # Runs the body of the post through RDiscount and returns the html
-  def body
-    RDiscount.new(@body).to_html
+  def body(format = nil)
+    format == :raw ? @body : RDiscount.new(@body).to_html
   end
 
   # The filename (without the .post) of this post
