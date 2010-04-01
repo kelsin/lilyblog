@@ -24,9 +24,10 @@ div.post div.body { clear: both; margin: 0.5em 0; overflow-x: auto; }
 div.post div.body ul { margin: 0.5em 1em; }
 div.post div.body ul li { margin: 0.2em 0; }
 
-div.post div.body p { margin: 0.5em 0; line-height: 1.25em; }
+div.post div.body p { margin: 0; line-height: 1.25em; }
+div.post div.body p + p { text-indent: 2em; }
 
-div.post div.body dl { overflow: auto; font-size: 0.9em; }
+div.post div.body dl { overflow: auto; font-size: 0.9em; margin: 0.5em 0; }
 div.post div.body dl dt, div.post div.body dl dd { float: left; margin: 0.2em 0 0.2em 0; }
 div.post div.body dl dt { font-weight: bold; clear: left; margin-right: 0.5em; width: 8em; text-align: right; }
 div.post div.body dl dd { }
