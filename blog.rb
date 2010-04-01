@@ -2,6 +2,8 @@ require 'rubygems'
 require 'sinatra'
 require 'rdiscount'
 require 'haml'
+require 'uv'
+require 'rack/codehighlighter'
 
 # Post model
 require 'post'
@@ -12,6 +14,10 @@ BLOG_NAME = "M-x Kelsin"
 BLOG_URL = "http://blog.kelsin.net"
 BLOG_EMAIL = "kelsin@valefor.com"
 BLOG_DESC = "BLOG"
+THEME="twilight"
+
+# Code Highlighting
+use Rack::Codehighlighter, :ultraviolet, :markdown => true, :theme => THEME, :lines => false, :element => "pre>code", :pattern => /\A:::([-_+\w]+)\s*(\n|&#x000A;)/, :logging => true
 
 # Filters
 before do
@@ -91,7 +97,7 @@ get %r{^/tags/([A-Za-z0-9_-]+)/(page/([0-9]+)/)?$} do |tag,temp,page|
 
   @posts = Post.find_by_tag(@tag,@page) rescue pass
 
-  content_type 'application/xhtml+xml', :charset => 'utf-8'
+  content_type 'text/html', :charset => 'utf-8'
   haml :tags
 end
 
@@ -116,7 +122,7 @@ get %r{^/(page/([0-9]+)/)?$} do |temp,page|
 
   @posts = Post.all(@page) rescue redirect('/')
 
-  content_type 'application/xhtml+xml', :charset => 'utf-8'
+  content_type 'text/html', :charset => 'utf-8'
   haml :posts
 end
 
@@ -133,7 +139,7 @@ end
 
 # Single Post
 get %r{^/([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9])/([A-Za-z0-9_-]+)/$} do |year, month, day, slug|
-  content_type 'application/xhtml+xml', :charset => 'utf-8'
+  content_type 'text/html', :charset => 'utf-8'
 
   @post = Post.find("#{year}#{month}#{day}_#{slug}") rescue pass
   @title = @post.title
