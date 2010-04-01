@@ -19,8 +19,9 @@
         $(function() { load_disqus(); });
       #disqus_thread
       %noscript
-        Please enable JavaScript to view the
-        %a{ :href => 'http://disqus.com/?ref_noscript=mxkelsin' } comments
+        .comments_no_script
+          Please enable JavaScript to view the
+          %a{ :href => 'http://disqus.com/?ref_noscript=mxkelsin' } comments
   - else
     .number_comments
       %a{ :title => 'Show Comments', :href => "#{post_url(post)}#disqus_thread" } Show Comments
