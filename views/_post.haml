@@ -25,5 +25,5 @@
         %a{ :href => 'http://disqus.com/?ref_noscript=mxkelsin' } comments
   - else
     .number_comments
-      %a{ :href => "#{post_url(post)}#disqus_thread" } Show Comments
+      %a{ :title => 'Show Comments', :href => "#{post_url(post)}#disqus_thread", :data_disqus => "#{BLOG_URL}#{post_url(post)}#disqus_thread" } Show Comments
 

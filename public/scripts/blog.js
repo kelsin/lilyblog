@@ -5,9 +5,11 @@ function load_disqus() {
 }
 
 function load_comment_links() {
+    $('.number_comments a').html('Loading Comments ...');
+
     var query = '?';
     $('.number_comments a').each(function(index, ele) {
-        query += 'url' + index + '=' + encodeURIComponent($(ele).attr('href')) + '&';
+        query += 'url' + index + '=' + encodeURIComponent($(ele).attr('data_disqus')) + '&';
     });
     $('body').append($('<script></script>').attr({ src: 'http://disqus.com/forums/mxkelsin/get_num_replies.js' + query,
                                                    type: 'text/javascript' }));
@@ -16,8 +18,12 @@ function load_comment_links() {
 }
 
 $(function() {
-    // Hide Comments at start
-    $('.comments').hide();
+    // Hide Comments at start unless we have #disqus_thread
+    if($.param.fragment() != 'disqus_thread') {
+        $('.comments').hide();
+        $('.show_comments').show();
+    }
+
     $('.show_comments a').click(function() {
         if($('.comments').is(':visible')) {
             $('.show_comments a').html('Show Comments');
@@ -27,10 +33,8 @@ $(function() {
             $('.comments').slideDown();
         }
 
-        // $('.show_comments').hide();
         return false;
     });
-    $('.show_comments').show();
 
     // Lightbox
     $('.post .body a:has(img)').lightBox({ imageLoading: '/images/loading.gif',

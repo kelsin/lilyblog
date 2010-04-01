@@ -9,10 +9,13 @@ require 'post'
 # Config
 PAGE_SIZE = 10
 BLOG_NAME = "M-x Kelsin"
+BLOG_URL = "http://blog.kelsin.net"
+BLOG_EMAIL = "kelsin@valefor.com"
+BLOG_DESC = "BLOG"
 
 # Filters
 before do
-  cache_control :public, :max_age => 2592000
+  cache_control :public, :max_age => 2592000 unless settings.environment == :development
   content_type 'text/html', :charset => 'ISO-8859-1'
 
   @tags = Post.tags.sort do |a,b|
@@ -84,6 +87,7 @@ end
 get %r{^/tags/([A-Za-z0-9_-]+)/(page/([0-9]+)/)?$} do |tag,temp,page|
   @page = [page.to_i, 1].max
   @tag = Post.clean_tag(tag)
+  @title = "Posts tagged by #{@tag}"
 
   redirect "/tags/#{tag}/" if page and @page < 2
 
@@ -101,9 +105,18 @@ get %r{^/(page/([0-9]+)/)?$} do |temp,page|
   haml :posts
 end
 
+# Feed
+get '/feed/' do
+  content_type 'application/rss+xml', :charset => 'ISO-8859-1'
+  @page = 1
+  @posts = Post.all(@page) rescue pass
+  builder :feed
+end
+
 # Single Post
 get %r{^/([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9])/([A-Za-z0-9_-]+)/$} do |year, month, day, slug|
   @post = Post.find("#{year}#{month}#{day}_#{slug}") rescue pass
+  @title = @post.title
 
   haml :post
 end

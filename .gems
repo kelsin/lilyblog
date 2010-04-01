@@ -2,3 +2,4 @@ sinatra --version '>= 1.0'
 rdiscount
 haml
 grepper
+builder
