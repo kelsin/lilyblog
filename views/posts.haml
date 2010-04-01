@@ -1,7 +1,7 @@
 %h2 Posts
 
 #posts.posts
-  = partial :post, @posts
+  = partial :post, @posts, :comments => false
 
 - if @page > 1 or (@page * PAGE_SIZE) < Post.count
   %ul.pages
@@ -11,4 +11,8 @@
     - if (@page * PAGE_SIZE) < Post.count
       %li
         %a{ :href => page_url(@page + 1) } Next Page
+
+%script{ :type => 'text/javascript' }
+  $(function() { load_comment_links(); });
+
 

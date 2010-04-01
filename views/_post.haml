@@ -10,14 +10,20 @@
         %a{ :href => tag_url(tag) }= tag
   .body
     = post.body
-  .comments
-    %script{ :type => 'text/javascript' }
-      - # var disqus_url = '#{request.url}';
-      - if settings.environment == :development
-        var disqus_developer = 1;
-      $(function() { load_disqus(); });
-    #disqus_thread
-    %noscript
-      Please enable JavaScript to view the
-      %a{ :href => 'http://disqus.com/?ref_noscript=mxkelsin' } comments
+  - if comments
+    .show_comments{ :style => 'display: none;' }
+      %a{ :href => '#' } Show Comments
+    .comments{ :id => "post_#{post.id}_comments" }
+      %script{ :type => 'text/javascript' }
+        - # var disqus_url = '#{request.url}';
+        - if settings.environment == :development
+          var disqus_developer = 1;
+        $(function() { load_disqus(); });
+      #disqus_thread
+      %noscript
+        Please enable JavaScript to view the
+        %a{ :href => 'http://disqus.com/?ref_noscript=mxkelsin' } comments
+  - else
+    .number_comments
+      %a{ :href => "#{post_url(post)}#disqus_thread" } Show Comments
 

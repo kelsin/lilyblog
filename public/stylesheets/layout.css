@@ -25,3 +25,11 @@ div.post div.body ul { margin: 0.5em 1em; }
 div.post div.body ul li { margin: 0.2em 0; }
 
 div.post div.body p { margin: 0.5em 0; }
+
+/* Post Comments */
+div.post div.number_comments { overflow: auto; line-height: 1.2em; }
+div.post div.number_comments a { float: right; font-size: 0.7em; }
+
+div.post div.show_comments { overflow: auto; line-height: 1.2em; }
+div.post div.show_comments a { float: right; font-size: 0.7em; }
+.dsq-dc-logo { display: none !important; }

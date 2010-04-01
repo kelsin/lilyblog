@@ -26,9 +26,9 @@ helpers do
     @title ? "#{@title} - #{BLOG_NAME}" : BLOG_NAME
   end
 
-  def partial(name, obj)
+  def partial(name, obj, locals = {})
     Array(obj).map do |item|
-      haml "_#{name}".to_sym, :locals => { name.to_sym => item }, :layout => false
+      haml "_#{name}".to_sym, :locals => { name.to_sym => item }.merge(locals), :layout => false
     end.join("\n")
   end
 
