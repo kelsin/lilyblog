@@ -97,7 +97,6 @@ get %r{^/tags/([A-Za-z0-9_-]+)/(page/([0-9]+)/)?$} do |tag,temp,page|
 
   @posts = Post.find_by_tag(@tag,@page) rescue pass
 
-  content_type 'text/html', :charset => 'utf-8'
   haml :tags
 end
 
@@ -116,8 +115,6 @@ end
 
 # Posts
 get %r{^/(page/([0-9]+)/)?$} do |temp,page|
-  content_type 'application/xhtml+xml', :charset => 'utf-8'
-
   @page = [page.to_i, 1].max
 
   redirect '/' if page and @page < 2
@@ -140,8 +137,6 @@ end
 
 # Single Post
 get %r{^/([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9])/([A-Za-z0-9_-]+)/$} do |year, month, day, slug|
-  content_type 'text/html', :charset => 'utf-8'
-
   @post = Post.find("#{year}#{month}#{day}_#{slug}") rescue pass
   @title = @post.title
 
