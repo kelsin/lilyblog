@@ -19,6 +19,8 @@ THEME="twilight"
 # Code Highlighting
 use Rack::Codehighlighter, :ultraviolet, :markdown => true, :theme => THEME, :lines => false, :element => "pre>code", :pattern => /\A:::([-_+\w]+)\s*(\n|&#x000A;)/, :logging => true
 
+set :haml, { :format => :xhtml }
+
 # Filters
 before do
   cache_control :public, :max_age => 2592000 unless settings.environment == :development
