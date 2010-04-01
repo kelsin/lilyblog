@@ -1,18 +1,14 @@
-%h2
-  - if @tag
-    == Posts tagged by #{@tag}
-  - else
-    Posts
+%h2 Posts
 
 #posts.posts
-  = partial :post, @posts[limit]
+  = partial :post, @posts
 
-- if page > 1 or (limit.max + 1) < @posts.size
+- if @page > 1 or (@page * PAGE_SIZE) < Post.count
   %ul.pages
-    - if page > 1
+    - if @page > 1
       %li
-        %a{ :href => page_url(page - 1) } Prev Page
-    - if (limit.max + 1) < @posts.size
+        %a{ :href => page_url(@page - 1) } Prev Page
+    - if (@page * PAGE_SIZE) < Post.count
       %li
-        %a{ :href => page_url(page + 1) } Next Page
+        %a{ :href => page_url(@page + 1) } Next Page
 

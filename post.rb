@@ -1,22 +1,49 @@
+require 'grepper'
+
 class Post
-  attr_reader :body, :meta, :file
+  attr_reader :meta, :file
 
-  def self.all
-    Dir.glob(File.join('posts','*','*.post')).map { |p| Post.new(p) }.sort
+  def self.files(tag = nil)
+    if tag
+      g = Grepper.new
+      g.pattern = /^tags:.*#{tag}/
+      g.files = files
+      g.run
+
+      files = []
+
+      g.results.each do |file, matches|
+        files << file if matches.size > 0
+      end
+
+      files
+    else
+      Dir.glob(File.join('posts','*.post')).sort.reverse
+    end
   end
 
-  def self.find_by_category(category)
-    Dir.glob(File.join('posts', "#{category}",'*.post')).map { |p| Post.new(p) }.sort
+  def self.limit(page)
+    offset = (page - 1) * PAGE_SIZE
+    offset..(offset + (PAGE_SIZE - 1))
   end
 
-  def self.find_by_tag(tag)
-    Post.all.select do |post|
-      post.tags.member? tag
-    end.sort
+  # Returns all of the posts
+  def self.all(page = 1)
+    files[limit(page)].map { |p| Post.new(p) }
   end
 
-  def self.find(params)
-    Post.new(Dir.glob(File.join('posts','*',"#{params[:year]}#{params[:month]}#{params[:day]}_#{params[:slug]}.post")).first)
+  # Total number of posts
+  def self.count(tag = nil)
+    files(tag).size
+  end
+
+  # Returns all of the posts with a certain tag
+  def self.find_by_tag(tag, page = 1)
+    files(tag)[limit(page)].map { |p| Post.new(p) }
+  end
+
+  def self.find(name)
+    Post.new(File.join('posts',"#{name}.post"))
   end
 
   def self.tag(tag)
@@ -28,8 +55,8 @@ class Post
 
     @counts = {}
 
-    Post.all.map do |p|
-      p.tags.each do |tag|
+    files.map do |file|
+      Post.new(file).tags.each do |tag|
         @counts[tag] ||= 0
         @counts[tag] += 1
       end
@@ -49,53 +76,65 @@ class Post
   end
 
   def self.clean_tag(tag)
-    tag.strip.gsub(/[^0-9a-zA-Z-_]+/, '_').downcase.to_sym
+    tag.strip.gsub(/[^0-9a-zA-Z_-]+/, '_').downcase
   end
 
   def initialize(file)
     @file = file
     File.open(file, 'r') do |file|
-      data,body = file.read.split('---', 2).map { |section| section.strip }
+      data,@body = file.read.split('---', 2).map { |section| section.strip }
 
       @meta = {}
       YAML::load(data).each do |key, val|
         @meta[key.to_sym] = val
       end
-      @body = RDiscount.new(body).to_html
     end
   end
 
+  # Runs the body of the post through RDiscount and returns the html
+  def body
+    RDiscount.new(@body).to_html
+  end
+
+  # The filename (without the .post) of this post
   def id
     basename
   end
 
+  # The title of the post
   def to_s
     @meta[:title]
   end
 
+  # Turns the tags into symbols and returns an array of them
   def tags
     @meta[:tags].split(',').map do |tag|
       Post.clean_tag(tag)
     end
   end
 
+  # Allows you to grab meta elements using normal methods
   def method_missing(id, *args)
     return @meta[id.to_sym] if @meta.has_key? id.to_sym
     raise NoMethodError
   end
 
+  # The filename of this post without the .post
   def basename
     File.basename(self.file, '.post')
   end
 
+  # The filename without the date aspect
   def slug
     basename.split('_', 2)[1]
   end
 
+  # The filename without the slug aspect
   def date
     Date.parse(basename.split('_', 2)[0])
   end
 
+  # Sort by filename
   def <=>(other)
     self.basename <=> other.basename
   end

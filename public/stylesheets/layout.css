@@ -1,0 +1,27 @@
+#page { width: 40em; margin: 1em auto; }
+
+/* Site Title */
+h1 { font-size: 3em; font-weight: bold; }
+
+/* Page Title */
+h2 { font-size: 2em; margin: 1em 0 0.4em 0; font-weight: bold; }
+
+/* Post Title */
+h3 { font-size: 1.5em; margin: 1em 0 0.2em 0; font-weight: bold; }
+
+/* Width Title */
+h4 { font-size: 1.2em; margin: 0.6em 0 0.2em 0; font-weight: bold; }
+
+/* Post Meta */
+div.post dl.meta { font-size: 0.9em; margin: 0.5em 0; position: relative; overflow: auto; }
+div.post dl.meta dt { font-weight: bold; clear: left; float: left; }
+div.post dl.meta dd { float: left; }
+div.post dl.meta dt, div.post dl.meta dd { margin: 0.2em 0.5em 0.2em 0; }
+
+div.post div.body { clear: both; margin: 0.5em 0; }
+
+/* Post Content */
+div.post div.body ul { margin: 0.5em 1em; }
+div.post div.body ul li { margin: 0.2em 0; }
+
+div.post div.body p { margin: 0.5em 0; }

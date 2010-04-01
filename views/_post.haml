@@ -1,7 +1,23 @@
 %div[post]
   %h3
     %a{ :href => post_url(post) }= post.meta[:title]
-  .date= post.date
+  %dl.meta
+    %dt Date
+    %dd= post.date
+    %dt Tags
+    %dd
+      -post.tags.each do |tag|
+        %a{ :href => tag_url(tag) }= tag
   .body
     = post.body
+  .comments
+    %script{ :type => 'text/javascript' }
+      - # var disqus_url = '#{request.url}';
+      - if settings.environment == :development
+        var disqus_developer = 1;
+      $(function() { load_disqus(); });
+    #disqus_thread
+    %noscript
+      Please enable JavaScript to view the
+      %a{ :href => 'http://disqus.com/?ref_noscript=mxkelsin' } comments
 

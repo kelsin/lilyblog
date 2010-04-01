@@ -1,0 +1,11 @@
+title: Safari
+tags: apple, safari, quicksilver
+date: 2009-05-29 13:28:56 -04:00
+---
+So I've been trying my best to use Safari on my mac's as my main browser now. It's working pretty well. I use Firefox for AJAX development (when Safari doesn't give me what I need) but otherwise Safari is pretty great. The main reason is I like the speed, I like webkit and I can't wait for Safari 4's javascript engine so I figured I should get used to the thing now.
+
+Bookmarks now sync between my two macs easily due to MobileMe. I'm probably going to continue using the service for the bookmark and contact syncing features. Calendars is nice too but I'm still going to use Google Calendar since Caitlin is on a PC at home.
+
+One thing bugged me about Safari, I miss keyword smart bookmarks in Firefox. If you give a bookmark a keyword and include a %s in the address you can then type "keyword something" in the Firefox address bar and have it load the bookmark with the proper keyword and replace %s for something. For example I had one that searched for users on our site keyworded to "u" so a quick "u user@test.com" would search for a user by email address.
+
+This can now be solved by using QuickSilver. I've used Quicksilver for a while anyway. I like having key commands to switch from program to program. I often did this on my linux boxes by using virtual screens (when I wasn't in FVWM where I did this with actual window manager key bindings). QuickSilver is able to easily install a bunch of plugins and the "Web Searches" plugin is the one that does what I want. If I save a Safari bookmark (which is synced by MobileMe) with *** in the address QuickSilver will let me use that as a web search. So searching google 

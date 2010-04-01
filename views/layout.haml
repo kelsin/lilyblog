@@ -1,17 +1,20 @@
 !!!
 %html
   %head
-    %title= @title || "LilyBlog"
-    = stylesheet [:reset, :fonts, :tags]
+    %title= title
+    %script{ :src => 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js', :type => 'text/javascript' }
+    %script{ :src => '/scripts/comments.js', :type => 'text/javascript' }
+    = stylesheet [:reset, :layout, :fonts, :tags]
   %body
-    %h1
-      %a{ :href => '/' }= @title || "LilyBlog"
-    #content
-      = yield
-    #tag_cloud
-      %h4 Tags
-      %ul.tags
-        - @tags.each do |tag, amount|
-          %li{ :class => class_for_tag(tag) }
-            %a{ :href => tag_url(tag) }= tag
+    #page
+      %h1
+        %a{ :href => '/' }= title
+      #content
+        = yield
+      #tag_cloud
+        %h4 Tags
+        %ul.tags
+          - @tags.each do |tag, amount|
+            %li{ :class => class_for_tag(tag) }
+              %a{ :href => tag_url(tag) }= tag
 
