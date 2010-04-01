@@ -9,7 +9,7 @@ function load_comment_links() {
 
     var query = '?';
     $('.number_comments a').each(function(index, ele) {
-        query += 'url' + index + '=' + encodeURIComponent($(ele).attr('data_disqus')) + '&';
+        query += 'url' + index + '=' + encodeURIComponent($(ele).attr('href')) + '&';
     });
     $('body').append($('<script></script>').attr({ src: 'http://disqus.com/forums/mxkelsin/get_num_replies.js' + query,
                                                    type: 'text/javascript' }));
