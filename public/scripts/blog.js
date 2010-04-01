@@ -18,24 +18,6 @@ function load_comment_links() {
 }
 
 $(function() {
-    // Hide Comments at start unless we have #disqus_thread
-    if($.param.fragment() != 'disqus_thread') {
-        $('.comments').hide();
-        $('.show_comments').show();
-    }
-
-    $('.show_comments a').click(function() {
-        if($('.comments').is(':visible')) {
-            $('.show_comments a').html('Show Comments');
-            $('.comments').slideUp();
-        } else {
-            $('.show_comments a').html('Hide Comments');
-            $('.comments').slideDown();
-        }
-
-        return false;
-    });
-
     // Lightbox
     $('.post .body a:has(img)').lightBox({ imageLoading: '/images/loading.gif',
 	                                       imageBlank: '/images/blank.gif',

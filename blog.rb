@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'rdiscount'
 require 'haml'
+require 'ultraviolet'
 
 # Post model
 require 'post'

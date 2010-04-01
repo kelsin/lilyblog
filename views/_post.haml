@@ -11,8 +11,6 @@
   .body
     ~ post.body
   - if comments
-    .show_comments{ :style => 'display: none;' }
-      %a{ :href => '#' } Show Comments
     .comments{ :id => "post_#{post.id}_comments" }
       %script{ :type => 'text/javascript' }
         - # var disqus_url = '#{request.url}';
