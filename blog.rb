@@ -15,12 +15,12 @@ before do
   end
 end
 
-PAGE_SIZE = 2
+PAGE_SIZE = 20
 
 # Helpers
 helpers do
   def page
-    [params[:page].to_i, 1].max
+    [@page, 1].max
   end
 
   def limit
@@ -80,46 +80,37 @@ get %r{[^/]$} do
 end
 
 # Handle moving from wordpress
-get %r{-} do
-  redirect request.path.gsub(/-/,'_'), 301
+# get %r{-} do
+#   redirect request.path.gsub(/-/,'_'), 301
+# end
+
+# Tags
+get %r{^/tags/([A-Za-z0-9_]+)/(page/([0-9]+)/)?$} do |tag,temp,page|
+  @page = page.to_i
+  @tag = Post.clean_tag(tag)
+
+  redirect "/tags/#{tag}/" if page and @page < 2
+
+  @posts = Post.find_by_tag(@tag)
+  haml :posts
 end
 
 # Categories
-get '/categories/:category/page/:page/' do
-  redirect "/categories/#{params[:category]}/" if params[:page].to_i < 2
+get %r{^/categories/([A-Za-z0-9_]+)/(page/([0-9]+)/)?$} do |category,temp,page|
+  @page = page.to_i
+  @category = category.downcase
 
-  @posts = Post.find_by_category(params[:category])
+  redirect "/categories/#{category}/" if page and @page < 2
+
+  @posts = Post.find_by_category(@category)
   haml :posts
 end
 
-get '/categories/:category/' do
-  @posts = Post.find_by_category(params[:category])
-  haml :posts
-end
+# Posts
+get %r{^/(page/([0-9]+)/)?$} do |temp,page|
+  @page = page.to_i
 
-# Tags
-get '/tags/:tag/page/:page/' do
-  redirect "/tags/#{params[:tag]}/" if params[:page].to_i < 2
-
-  @tag = Post.clean_tag(params[:tag])
-  @posts = Post.find_by_tag(@tag)
-
-  pass if @posts.empty?
-
-  haml :posts
-end
-
-get '/tags/:tag/' do
-  @tag = Post.clean_tag(params[:tag])
-  @posts = Post.find_by_tag(@tag)
-
-  pass if @posts.empty?
-
-  haml :posts
-end
-
-get '/page/:page/' do
-  redirect '/' if params[:page].to_i < 2
+  redirect '/' if page and @page < 2
 
   @posts = Post.all
   haml :posts
@@ -127,15 +118,10 @@ end
 
 # Single Post
 get '/:year/:month/:day/:slug/' do
-  @post = Post.find(params)
+  @post = Post.find(params) rescue pass
 
   pass unless @post
 
   haml :post
 end
 
-# Get all posts
-get '/' do
-  @posts = Post.all
-  haml :posts
-end

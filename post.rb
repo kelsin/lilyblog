@@ -16,7 +16,7 @@ class Post
   end
 
   def self.find(params)
-    Post.new(Dir.glob(File.join('posts','*',"#{params[:year]}#{params[:month]}#{params[:day]}_#{params[:slug].gsub(/-/,'_')}.post")).first)
+    Post.new(Dir.glob(File.join('posts','*',"#{params[:year]}#{params[:month]}#{params[:day]}_#{params[:slug]}.post")).first)
   end
 
   def self.tag(tag)
@@ -49,7 +49,7 @@ class Post
   end
 
   def self.clean_tag(tag)
-    tag.strip.gsub(/[^0-9a-zA-Z_]+/, '_').downcase.to_sym
+    tag.strip.gsub(/[^0-9a-zA-Z-_]+/, '_').downcase.to_sym
   end
 
   def initialize(file)
