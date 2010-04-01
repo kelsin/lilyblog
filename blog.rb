@@ -100,7 +100,7 @@ get %r{^/tags/([A-Za-z0-9_-]+)/(page/([0-9]+)/)?$} do |tag,temp,page|
 
   @posts = Post.find_by_tag(@tag,@page) rescue pass
 
-  content_type 'application/xhtml+xml', :charset => 'ISO-8859-1'
+  content_type 'application/xhtml+xml', :charset => 'utf-8'
   haml :tags
 end
 
@@ -113,7 +113,7 @@ get '/tags/:tag/feed/' do
 
   @posts = Post.find_by_tag(@tag,@page) rescue pass
 
-  content_type 'application/rss+xml', :charset => 'ISO-8859-1'
+  content_type 'application/rss+xml', :charset => 'utf-8'
   builder :feed
 end
 
@@ -125,7 +125,7 @@ get %r{^/(page/([0-9]+)/)?$} do |temp,page|
 
   @posts = Post.all(@page) rescue redirect('/')
 
-  content_type 'application/xhtml+xml', :charset => 'ISO-8859-1'
+  content_type 'application/xhtml+xml', :charset => 'utf-8'
   haml :posts
 end
 
@@ -136,13 +136,13 @@ get '/feed/' do
 
   @posts = Post.all(@page) rescue pass
 
-  content_type 'application/rss+xml', :charset => 'ISO-8859-1'
+  content_type 'application/rss+xml', :charset => 'utf-8'
   builder :feed
 end
 
 # Single Post
 get %r{^/([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9])/([A-Za-z0-9_-]+)/$} do |year, month, day, slug|
-  content_type 'application/xhtml+xml', :charset => 'ISO-8859-1'
+  content_type 'application/xhtml+xml', :charset => 'utf-8'
 
   @post = Post.find("#{year}#{month}#{day}_#{slug}") rescue pass
   @title = @post.title
