@@ -1,4 +1,4 @@
-#page { width: 40em; margin: 1em auto; positive: relative; }
+#page { width: 40em; margin: 1em auto; position: relative; }
 
 /* Site Title */
 h1 { font-size: 3em; font-weight: bold; }
@@ -18,7 +18,7 @@ div.post dl.meta dt { font-weight: bold; clear: left; float: left; }
 div.post dl.meta dd { float: left; }
 div.post dl.meta dt, div.post dl.meta dd { margin: 0.2em 0.5em 0.2em 0; }
 
-div.post div.body { clear: both; margin: 0.5em 0; }
+div.post div.body { clear: both; margin: 0.5em 0; overflow-x: auto; }
 
 /* Post Content */
 div.post div.body ul { margin: 0.5em 1em; }
@@ -37,5 +37,8 @@ div.post div.show_comments a { float: right; font-size: 0.7em; }
 /* Feed Link */
 #feed_link { position: absolute; top: 0; right: 0;
              height: 28px; width: 28px;
-             background-image: url('/images/feed-icon-28x28.png'); }
+             background-image: url('/images/feed-icon-28x28.png');
+             background-repeat: no-repeat;
+             background-position: right center;
+             line-height: 28px; padding-right: 40px; }
 #feed_link a { text-indent: -9999px; }
