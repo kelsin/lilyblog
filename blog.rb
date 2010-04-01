@@ -2,7 +2,6 @@ require 'rubygems'
 require 'sinatra'
 require 'rdiscount'
 require 'haml'
-require 'ultraviolet'
 
 # Post model
 require 'post'
@@ -38,7 +37,7 @@ helpers do
 
   def stylesheet(name, media = 'all')
     Array(name).map do |sheet|
-      %Q{<link rel="stylesheet" type="text/css" href="/stylesheets/#{sheet}.css" media="#{media}" />}
+      %Q{<link rel="stylesheet" type="text/css" href="/css/#{sheet}.css" media="#{media}" />}
     end.join("\n")
   end
 
