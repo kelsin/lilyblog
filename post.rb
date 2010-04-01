@@ -130,7 +130,7 @@ class Post
   end
 
   # The filename without the slug aspect
-  def date
+  def filedate
     Date.parse(basename.split('_', 2)[0])
   end
 

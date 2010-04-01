@@ -42,7 +42,7 @@ helpers do
   end
 
   def post_url(post)
-    "/#{'%02d' % post.date.year}/#{'%02d' % post.date.month}/#{'%02d' % post.date.day}/#{post.slug}/"
+    "/#{'%02d' % post.filedate.year}/#{'%02d' % post.filedate.month}/#{'%02d' % post.filedate.day}/#{post.slug}/"
   end
 
   def feed_url
