@@ -12,7 +12,7 @@ THEME="twilight"
 # Code Highlighting
 use(Rack::Codehighlighter, :ultraviolet,
     :markdown => true, :theme => THEME, :lines => false,
-    :element => "pre>code", :pattern => /\A:::([-_+\w]+)\s*(\n|&#x000A;)/,
+    :element => "pre>code",
     :logging => true)
 
 run Sinatra::Application
