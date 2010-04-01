@@ -10,7 +10,7 @@
         var disqus_developer = 1;
         var disqus_url = '#{BLOG_URL}#{request.path}';
     %script{ :src => '/scripts/blog.js', :type => 'text/javascript' }
-    = stylesheet [:reset, :layout, :fonts, :tags, :lightbox]
+    = stylesheet [:reset, :layout, :fonts, :code, :lightbox]
     %link{ :rel => 'alternate', :type => 'application/rss+xml', :title => title, :href => feed_url }
   %body
     #page

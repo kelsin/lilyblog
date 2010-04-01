@@ -1,0 +1,15 @@
+/* Code Faces */
+.post .body code { color: #d3d7cf; background-color: #000; }
+.post .body code .comment { color: #555753; }
+.post .body code .comment-delimiter { color: #555753; }
+.post .body code .constant { color: #4e9a06; }
+.post .body code .function-name { color: #c4a000; }
+.post .body code .keyword { color: #729fcf; }
+.post .body code .string { color: #77507b; }
+.post .body code .type { color: #ad7fa8; }
+.post .body code .variable-name { }
+
+/* Links in code */
+.post .body code a { color: inherit; background-color: inherit;
+                     font: inherit; text-decoration: inherit; }
+.post .body code a:hover { text-decoration: underline; }
