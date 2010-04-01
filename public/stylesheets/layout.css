@@ -39,6 +39,8 @@ a#feed_link { position: absolute; top: 0; right: 0;
               display: block;
               height: 28px; width: 28px;
               text-indent: -9999px;
+              -webkit-transform: rotate(8deg);
+              -moz-transform: rotate(8deg);
               background-image: url('/images/feed-icon-28x28.png');
               background-repeat: no-repeat;
               background-position: right center; }
