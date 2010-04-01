@@ -11,10 +11,7 @@
         var disqus_url = '#{BLOG_URL}#{request.path}';
     %script{ :src => '/scripts/blog.js', :type => 'text/javascript' }
     = stylesheet [:reset, :layout, :fonts, :tags, :lightbox]
-    - if @tag
-      %link{ :rel => 'alternate', :type => 'application/rss+xml', :title => "#{BLOG_NAME} posts tagged with #{@tag}", :href => "#{BLOG_URL}/tags/#{@tag}/feed/" }
-    - else
-      %link{ :rel => 'alternate', :type => 'application/rss+xml', :title => BLOG_NAME, :href => "#{BLOG_URL}/feed/" }
+    %link{ :rel => 'alternate', :type => 'application/rss+xml', :title => title, :href => feed_url }
   %body
     #page
       %h1
@@ -27,4 +24,6 @@
           - @tags.each do |tag, amount|
             %li{ :class => class_for_tag(tag) }
               %a{ :href => tag_url(tag) }= tag
+      #feed_link
+        %a{ :href => feed_url } RSS
 

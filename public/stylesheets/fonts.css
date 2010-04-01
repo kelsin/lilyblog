@@ -1,1 +1,6 @@
 * { font-family: Helvetica, Verdana, sans-serif; }
+
+a:link, a:visited, a:active, a:hover { text-decoration: none; }
+
+a:link, a:visited, a:active { color: #a00; }
+a:hover { color: #f80; }

@@ -45,6 +45,10 @@ helpers do
     "/#{'%02d' % post.date.year}/#{'%02d' % post.date.month}/#{'%02d' % post.date.day}/#{post.slug}/"
   end
 
+  def feed_url
+    @tag ? "/tags/#{@tag}/feed/" : "/feed/"
+  end
+
   def add_page(url, page)
     url +  (("page/#{page}/" if page >= 2) || '')
   end
@@ -87,7 +91,7 @@ end
 get %r{^/tags/([A-Za-z0-9_-]+)/(page/([0-9]+)/)?$} do |tag,temp,page|
   @page = [page.to_i, 1].max
   @tag = Post.clean_tag(tag)
-  @title = "Posts tagged by #{@tag}"
+  @title = "Posts tagged with #{@tag}"
 
   redirect "/tags/#{tag}/" if page and @page < 2
 
@@ -99,9 +103,11 @@ end
 get '/tags/:tag/feed/' do
   @page = 1
   @tag = Post.clean_tag(params[:tag])
-  @posts = Post.find_by_tag(@tag,@page) rescue pass
-  @title = "#{BLOG_NAME} posts tagged with #{@tag}"
+  @title = "Posts tagged with #{@tag}"
   @link = "#{BLOG_URL}/tags/#{@tag}/"
+
+  @posts = Post.find_by_tag(@tag,@page) rescue pass
+
   builder :feed
 end
 
@@ -111,7 +117,7 @@ get %r{^/(page/([0-9]+)/)?$} do |temp,page|
 
   redirect '/' if page and @page < 2
 
-  @posts = Post.all(@page) rescue pass
+  @posts = Post.all(@page) rescue redirect('/')
   haml :posts
 end
 
@@ -119,10 +125,10 @@ end
 get '/feed/' do
   content_type 'application/rss+xml', :charset => 'ISO-8859-1'
   @page = 1
-  @posts = Post.all(@page) rescue pass
-  @title = BLOG_NAME
   @link = "#{BLOG_URL}/"
-  @tag = nil
+
+  @posts = Post.all(@page) rescue pass
+
   builder :feed
 end
 
