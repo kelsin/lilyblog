@@ -35,10 +35,10 @@ div.post div.show_comments a { float: right; font-size: 0.7em; }
 .dsq-dc-logo { display: none !important; }
 
 /* Feed Link */
-#feed_link { position: absolute; top: 0; right: 0;
-             height: 28px; width: 28px;
-             background-image: url('/images/feed-icon-28x28.png');
-             background-repeat: no-repeat;
-             background-position: right center;
-             line-height: 28px; padding-right: 40px; }
-#feed_link a { text-indent: -9999px; }
+a#feed_link { position: absolute; top: 0; right: 0;
+              display: block;
+              height: 28px; width: 28px;
+              text-indent: -9999px;
+              background-image: url('/images/feed-icon-28x28.png');
+              background-repeat: no-repeat;
+              background-position: right center; }

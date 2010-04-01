@@ -24,6 +24,5 @@
           - @tags.each do |tag, amount|
             %li{ :class => class_for_tag(tag) }
               %a{ :href => tag_url(tag) }= tag
-      #feed_link
-        %a{ :href => feed_url } RSS
+      %a#feed_link.rss{ :href => feed_url, :title => title } RSS
 
