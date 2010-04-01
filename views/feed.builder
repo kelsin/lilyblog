@@ -1,8 +1,8 @@
 xml.instruct!
 xml.rss :version => "2.0" do
   xml.channel do
-    xml.title "M-x Kelsin"
-    xml.link "#{BLOG_URL}/"
+    xml.title @title
+    xml.link @link
     xml.description BLOG_DESC
     xml.language "en-us"
     xml.pubDate Time.now.to_s

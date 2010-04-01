@@ -95,6 +95,16 @@ get %r{^/tags/([A-Za-z0-9_-]+)/(page/([0-9]+)/)?$} do |tag,temp,page|
   haml :tags
 end
 
+# Tag Feed
+get '/tags/:tag/feed/' do
+  @page = 1
+  @tag = Post.clean_tag(params[:tag])
+  @posts = Post.find_by_tag(@tag,@page) rescue pass
+  @title = "#{BLOG_NAME} posts tagged with #{@tag}"
+  @link = "#{BLOG_URL}/tags/#{@tag}/"
+  builder :feed
+end
+
 # Posts
 get %r{^/(page/([0-9]+)/)?$} do |temp,page|
   @page = [page.to_i, 1].max
@@ -110,6 +120,9 @@ get '/feed/' do
   content_type 'application/rss+xml', :charset => 'ISO-8859-1'
   @page = 1
   @posts = Post.all(@page) rescue pass
+  @title = BLOG_NAME
+  @link = "#{BLOG_URL}/"
+  @tag = nil
   builder :feed
 end
 
