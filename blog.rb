@@ -2,8 +2,6 @@ require 'rubygems'
 require 'sinatra'
 require 'rdiscount'
 require 'haml'
-require 'uv'
-require 'rack/codehighlighter'
 
 # Post model
 require 'post'
@@ -14,13 +12,6 @@ BLOG_NAME = "M-x Kelsin"
 BLOG_URL = "http://blog.kelsin.net"
 BLOG_EMAIL = "kelsin@valefor.com"
 BLOG_DESC = "BLOG"
-THEME="twilight"
-
-# Code Highlighting
-use(Rack::Codehighlighter, :ultraviolet,
-    :markdown => true, :theme => THEME, :lines => false,
-    :element => "pre>code", :pattern => /\A:::([-_+\w]+)\s*(\n|&#x000A;)/,
-    :logging => true)
 
 # Filters
 before do
