@@ -116,13 +116,14 @@ end
 
 # Posts
 get %r{^/(page/([0-9]+)/)?$} do |temp,page|
+  content_type 'application/xhtml+xml', :charset => 'utf-8'
+
   @page = [page.to_i, 1].max
 
   redirect '/' if page and @page < 2
 
   @posts = Post.all(@page) rescue redirect('/')
 
-  content_type 'text/html', :charset => 'utf-8'
   haml :posts
 end
 
