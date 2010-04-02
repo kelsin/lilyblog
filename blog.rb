@@ -201,6 +201,10 @@ end
 get %r{^/([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9])/([A-Za-z0-9_-]+)/$} do |year, month, day, slug|
   @post = Post.find("#{year}#{month}#{day}_#{slug}")
 
-  haml "= partial(:post, @post, :comments => true)"
+  haml :post
 end
 
+__END__
+
+@@ post
+= partial(:post, @post, :comments => true)
