@@ -15,7 +15,7 @@ set :posts_title, 'Posts'
 set :tag_title, lambda { |tag| "Posts tagged with #{tag}" }
 set :search_title, lambda { |search| "Posts containing #{search}" }
 
-Post.page_size = 2
+Post.page_size = 10
 Post.theme = 'twilight'
 
 # Filters
