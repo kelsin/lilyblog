@@ -3,7 +3,6 @@ require 'sinatra'
 require 'rdiscount'
 require 'haml'
 require 'uv'
-require 'rack/codehighlighter'
 
 # Post model
 require 'post'
