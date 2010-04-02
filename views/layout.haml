@@ -19,6 +19,8 @@
     - [:reset, :layout, :fonts, :colors, :lightbox, 'themes/twilight'].each do |css|
       %link{ css_attrs(css) }
 
+    - if @tag or @search
+      %link{ :rel => 'alternate', :type => 'application/rss+xml', :title => settings.blog_name, :href => '/feed/' }
     %link{ :rel => 'alternate', :type => 'application/rss+xml', :title => title, :href => feed_url }
     %link{ :rel => 'icon', :type => 'image/png', :href => '/images/icon.png' }
   %body
