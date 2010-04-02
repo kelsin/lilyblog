@@ -65,7 +65,9 @@ class Post
 
     # Returns all of the posts
     def all(page = 1)
-      files[limit(page)].map { |p| Post.new(p) }
+      paged = files[limit(page)]
+
+      paged ? paged.map { |p| Post.new(p) } : []
     end
 
     # Total number of posts
@@ -75,12 +77,14 @@ class Post
 
     # Returns all of the posts with a certain tag
     def find_by_tag(tag, page = 1)
-     files(tag)[limit(page)].map { |p| Post.new(p) }
+      paged = files(tag)[limit(page)]
+
+      paged ? paged.map { |p| Post.new(p) } : []
     end
 
     # Returns all of the posts containing a string
     def search(pattern)
-      grep(/#{string}/i).map { |p| Post.new(p) }
+      grep(/#{pattern}/i).map { |p| Post.new(p) }
     end
 
     # Find a post by name

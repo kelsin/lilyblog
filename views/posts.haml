@@ -1,16 +1,19 @@
-%h2 Posts
+%h2= @title
 
 #posts.posts
   = partial :post, @posts, :comments => false
 
-- if @page > 1 or (@page * Post.page_size) < Post.count
-  %ul.pages
+- if @page and max_page > 1
+  .page_links
     - if @page > 1
-      %li
-        %a{ :href => page_url(@page - 1) } Prev Page
-    - if (@page * Post.page_size) < Post.count
-      %li
-        %a{ :href => page_url(@page + 1) } Next Page
+      %a{ :href => prev_page_url } &lt;
+    - 1.upto max_page do |n|
+      - if @page == n
+        = n
+      - else
+        %a{ :href => page_url(n) }= n
+    - if (@page * Post.page_size) < Post.count(@tag)
+      %a{ :href => next_page_url } &gt;
 
 %script{ :type => 'text/javascript' }
   $(function() { load_comment_links(); });

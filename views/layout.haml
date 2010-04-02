@@ -2,7 +2,7 @@
 !!! Strict
 %html{ html_attrs }
   %head
-    %title= title
+    %title #{title} - #{settings.blog_name}
 
     %meta{ 'http-equiv'=> 'Content-type', :content => 'text/html;charset=UTF-8' }
 
@@ -19,9 +19,9 @@
     - [:reset, :layout, :fonts, :colors, :lightbox, 'themes/twilight'].each do |css|
       %link{ css_attrs(css) }
 
-    - if @tag or @search
-      %link{ :rel => 'alternate', :type => 'application/rss+xml', :title => settings.blog_name, :href => '/feed/' }
-    %link{ :rel => 'alternate', :type => 'application/rss+xml', :title => title, :href => feed_url }
+    - feed_urls.each do |title, href|
+      %link{ :rel => 'alternate', :type => 'application/rss+xml', :title => title, :href => href }
+
     %link{ :rel => 'icon', :type => 'image/png', :href => '/images/icon.png' }
   %body
     #page
@@ -34,6 +34,11 @@
         %p
           - @tags.each do |tag, amount|
             %a{ :class => class_for_tag(tag), :href => tag_url(tag) }= tag
+      #search_form
+        %form{ :method => :get, :action => '/' }
+          %label{ :for => 'search' } Search
+          %input#search{ :type => 'text', :name => 'search' }
+          %input{ :type => 'submit', :value => 'Search' }
       %a#feed_link.rss{ :href => feed_url, :title => title } RSS
       #validation
         %a{ :href => 'http://validator.w3.org/check?uri=referer' }

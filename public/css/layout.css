@@ -67,4 +67,9 @@ a#feed_link { position: absolute; top: 0; right: 0;
               background-repeat: no-repeat;
               background-position: right center; }
 
+/* Search */
+#search_form { position: absolute; top: 0px; right: 34px;
+               height: 28px; line-height: 28px; }
+#search_form label { display: none; }
+
 #validation { margin-top: 1em; }

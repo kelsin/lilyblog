@@ -11,7 +11,11 @@ set :blog_url, 'http://blog.kelsin.net'
 set :blog_email, 'kelsin@valefor.com'
 set :blog_desc, 'Kelsin\'s blog'
 
-Post.page_size = 10
+set :posts_title, 'Posts'
+set :tag_title, lambda { |tag| "Posts tagged with #{tag}" }
+set :search_title, lambda { |search| "Posts containing #{search}" }
+
+Post.page_size = 2
 Post.theme = 'twilight'
 
 # Filters
@@ -26,7 +30,15 @@ end
 # Helpers
 helpers do
   def title
-    @title ? "#{@title} - #{settings.blog_name}" : settings.blog_name
+    if @post
+      @post.title
+    elsif @tag
+      settings.tag_title(@tag)
+    elsif @search
+      settings.search_title(@search)
+    else
+      settings.posts_title
+    end
   end
 
   def partial(name, obj, locals = {})
@@ -46,22 +58,53 @@ helpers do
     "/#{'%02d' % post.filedate.year}/#{'%02d' % post.filedate.month}/#{'%02d' % post.filedate.day}/#{post.slug}/"
   end
 
+  def feed_urls
+    urls = [[settings.posts_title, '/feed/']]
+
+    if word = @tag || @search
+      urls.push [settings.tag_title(word), "#{tag_url(word)}feed/"]
+      urls.push [settings.search_title(word), "#{search_url(word)}feed/"]
+    end
+
+    return urls
+  end
+
   def feed_url
-    return "/tags/#{@tag}/feed/" if @tag
-    return "/search/#{@search}/feed/" if @search
-    "/feed/"
+    if @tag
+      "#{tag_url(@tag)}feed/"
+    elsif @search
+      "#{search_url(@search)}feed/"
+    else
+      '/feed/'
+    end
   end
 
-  def add_page(url, page)
-    url +  (("page/#{page}/" if page >= 2) || '')
+  def search_url(search)
+    "/search/#{search}/"
   end
 
-  def tag_url(tag, page = 1)
-    add_page "/tags/#{tag}/", page
+  def tag_url(tag)
+    "/tags/#{tag}/"
   end
 
-  def page_url(page = 1)
-    add_page '/', page
+  def max_page
+    (Post.count(@tag).to_f / Post.page_size.to_f).ceil
+  end
+
+  def page_url(page)
+    "#{request.path}?page=#{page}"
+  end
+
+  def next_page_url
+    "#{request.path}?page=#{@page + 1}"
+  end
+
+  def prev_page_url
+    if @page <= 2
+      request.path
+    else
+      "#{request.path}?page=#{@page - 1}"
+    end
   end
 
   def class_for_tag(tag)
@@ -86,49 +129,27 @@ get %r{[^/]$} do
 end
 
 # Tags
-get %r{^/tags/([A-Za-z0-9_-]+)/(page/([0-9]+)/)?$} do |tag,temp,page|
-  @page = [page.to_i, 1].max
-  @tag = Post.clean_tag(tag)
-  @title = "Posts tagged with #{@tag}"
+get '/tags/:tag/' do
+  @page = [params[:page].to_i, 1].max
+  redirect "/tags/#{params[:tag]}/" if params[:page] and @page < 2
 
-  redirect "/tags/#{tag}/" if page and @page < 2
+  @tag = Post.clean_tag(params[:tag])
+  @title = "Posts tagged with #{@tag}"
 
   @posts = Post.find_by_tag(@tag,@page)
 
-  haml :tags
+  haml :posts
 end
 
 # Tag Feed
 get '/tags/:tag/feed/' do
   @page = 1
   @tag = Post.clean_tag(params[:tag])
+  @link = "#{settings.blog_url}#{tag_url(@tag)}"
+
   @title = "Posts tagged with #{@tag}"
-  @link = "#{settings.blog_url}/tags/#{@tag}/"
 
   @posts = Post.find_by_tag(@tag,@page)
-
-  content_type 'application/rss+xml', :charset => 'utf-8'
-  builder :feed
-end
-
-# Posts
-get %r{^/(page/([0-9]+)/)?$} do |temp,page|
-  @page = [page.to_i, 1].max
-
-  redirect '/' if page and @page < 2
-
-  @posts = Post.all(@page)
-
-  haml :posts
-end
-
-# Search Feed
-get '/search/:search/feed/' do
-  @search = params[:search]
-  @title = "Posts containing #{@search}"
-  @link = "#{settings.blog_url}/search/#{@search}/"
-
-  @posts = Post.search(@search)
 
   content_type 'application/rss+xml', :charset => 'utf-8'
   builder :feed
@@ -136,11 +157,33 @@ end
 
 # Search
 get '/search/:search/' do
-  @search = params[:search]
-  @title = "Posts containing #{@search}"
+  @search = params[:search].strip.downcase
   @posts = Post.search(@search)
 
-  haml :search
+  haml :posts
+end
+
+# Search Feed
+get '/search/:search/feed/' do
+  @search = params[:search].strip.downcase
+  @link = "#{settings.blog_url}#{search_url(@search)}"
+
+  @posts = Post.search(@search)
+
+  content_type 'application/rss+xml', :charset => 'utf-8'
+  builder :feed
+end
+
+# Posts
+get '/' do
+  redirect "/search/#{params[:search].strip.downcase}/" if params[:search]
+
+  @page = [params[:page].to_i, 1].max
+  redirect '/' if params[:page] and @page < 2
+
+  @posts = Post.all(@page)
+
+  haml :posts
 end
 
 # Feed
@@ -157,8 +200,7 @@ end
 # Single Post
 get %r{^/([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9])/([A-Za-z0-9_-]+)/$} do |year, month, day, slug|
   @post = Post.find("#{year}#{month}#{day}_#{slug}")
-  @title = @post.title
 
-  haml :post
+  haml "= partial(:post, @post, :comments => true)"
 end
 

@@ -1,7 +1,7 @@
 xml.instruct!
 xml.rss :version => "2.0" do
   xml.channel do
-    xml.title title
+    xml.title "#{title} - #{settings.blog_name}"
     xml.link @link
     xml.description settings.blog_desc
     xml.language "en-us"

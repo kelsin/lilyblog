@@ -1,9 +1,0 @@
-%h2= @title
-
-#posts.posts
-  = partial :post, @posts, :comments => false
-
-%script{ :type => 'text/javascript' }
-  $(function() { load_comment_links(); });
-
-
