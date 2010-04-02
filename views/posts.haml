@@ -3,12 +3,12 @@
 #posts.posts
   = partial :post, @posts, :comments => false
 
-- if @page > 1 or (@page * PAGE_SIZE) < Post.count
+- if @page > 1 or (@page * settings.page_size) < Post.count
   %ul.pages
     - if @page > 1
       %li
         %a{ :href => page_url(@page - 1) } Prev Page
-    - if (@page * PAGE_SIZE) < Post.count
+    - if (@page * settings.page_size) < Post.count
       %li
         %a{ :href => page_url(@page + 1) } Next Page
 

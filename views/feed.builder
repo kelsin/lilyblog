@@ -3,16 +3,16 @@ xml.rss :version => "2.0" do
   xml.channel do
     xml.title title
     xml.link @link
-    xml.description BLOG_DESC
+    xml.description settings.blog_desc
     xml.language "en-us"
     xml.pubDate Time.now.to_s
-    xml.webMaster BLOG_EMAIL
+    xml.webMaster settings.blog_email
 
     @posts.each do |post|
       xml.item do
         xml.title post.title
-        xml.link "#{BLOG_URL}#{post_url(post)}"
-        xml.guid "#{BLOG_URL}#{post_url(post)}"
+        xml.link "#{settings.blog_url}#{post_url(post)}"
+        xml.guid "#{settings.blog_url}#{post_url(post)}"
         xml.description post.body
         xml.pubDate post.date
       end

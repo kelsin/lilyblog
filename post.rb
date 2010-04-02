@@ -3,6 +3,10 @@ require 'grepper'
 class Post
   attr_reader :meta, :file
 
+  def self.page_size=(size)
+    @@page_size = size
+  end
+
   def self.files(tag = nil)
     if tag
       g = Grepper.new
@@ -23,8 +27,8 @@ class Post
   end
 
   def self.limit(page)
-    offset = (page - 1) * PAGE_SIZE
-    offset..(offset + (PAGE_SIZE - 1))
+    offset = (page - 1) * @@page_size
+    offset..(offset + (@@page_size - 1))
   end
 
   # Returns all of the posts

@@ -9,17 +9,17 @@ require 'rack/codehighlighter'
 require 'post'
 
 # Config
-PAGE_SIZE = 10
-BLOG_NAME = "M-x Kelsin"
-BLOG_URL = "http://blog.kelsin.net"
-BLOG_EMAIL = "kelsin@valefor.com"
-BLOG_DESC = "BLOG"
-THEME="twilight"
+set :blog_name, 'M-x Kelsin'
+set :blog_url, 'http://blog.kelsin.net'
+set :blog_email, 'kelsin@valefor.com'
+set :blog_desc, 'Kelsin\'s blog'
+set :page_size, Post.page_size=(10)
 
 # Code Highlighting
-use Rack::Codehighlighter, :ultraviolet, :markdown => true, :theme => THEME, :lines => false, :element => "pre>code", :pattern => /\A:::([-_+\w]+)\s*(\n|&#x000A;)/, :logging => true
-
-set :haml, { :format => :xhtml }
+use(Rack::Codehighlighter,
+    :ultraviolet, :markdown => true, :theme => 'twilight', :lines => false,
+    :element => "pre>code", :pattern => /\A:::([-_+\w]+)\s*(\n|&#x000A;)/,
+    :logging => true)
 
 # Filters
 before do
@@ -33,7 +33,7 @@ end
 # Helpers
 helpers do
   def title
-    @title ? "#{@title} - #{BLOG_NAME}" : BLOG_NAME
+    @title ? "#{@title} - #{settings.blog_name}" : settings.blog_name
   end
 
   def partial(name, obj, locals = {})
@@ -42,10 +42,11 @@ helpers do
     end.join("\n")
   end
 
-  def stylesheet(name, media = 'all')
-    Array(name).map do |sheet|
-      %Q{<link rel="stylesheet" type="text/css" href="/css/#{sheet}.css" media="#{media}" />}
-    end.join("\n")
+  def css_attrs(sheet, media = 'all')
+    { :rel => 'stylesheet',
+      :type => 'text/css',
+      :href => "/css/#{sheet}.css",
+      :media => media }
   end
 
   def post_url(post)
@@ -107,7 +108,7 @@ get '/tags/:tag/feed/' do
   @page = 1
   @tag = Post.clean_tag(params[:tag])
   @title = "Posts tagged with #{@tag}"
-  @link = "#{BLOG_URL}/tags/#{@tag}/"
+  @link = "#{settings.blog_url}/tags/#{@tag}/"
 
   @posts = Post.find_by_tag(@tag,@page) rescue pass
 
@@ -121,7 +122,7 @@ get %r{^/(page/([0-9]+)/)?$} do |temp,page|
 
   redirect '/' if page and @page < 2
 
-  @posts = Post.all(@page) rescue redirect('/')
+  @posts = Post.all(@page)
 
   haml :posts
 end
@@ -129,7 +130,7 @@ end
 # Feed
 get '/feed/' do
   @page = 1
-  @link = "#{BLOG_URL}/"
+  @link = "#{settings.blog_url}/"
 
   @posts = Post.all(@page) rescue pass
 

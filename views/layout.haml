@@ -1,5 +1,6 @@
+!!! XML
 !!! Strict
-%html{ :xmlns => 'http://www.w3.org/1999/xhtml' }
+%html{ html_attrs }
   %head
     %title= title
 
@@ -10,19 +11,21 @@
     %script{ :src => '/js/jquery.ba-bbq.min.js', :type => 'text/javascript' }
     %script{ :src => '/js/blog.js', :type => 'text/javascript' }
 
-    %script{ :type => 'text/javascript' }
-      - if settings.environment == :development
+    - if settings.environment == :development
+      :javascript
         var disqus_developer = 1;
-        var disqus_url = '#{BLOG_URL}#{request.path}';
+        var disqus_url = '#{settings.blog_url}#{request.path}';
 
-    = stylesheet [:reset, :layout, :fonts, THEME, :lightbox]
+    - [:reset, :layout, :fonts, :twilight, :lightbox].each do |css|
+      %link{ css_attrs(css) }
 
     %link{ :rel => 'alternate', :type => 'application/rss+xml', :title => title, :href => feed_url }
     %link{ :rel => 'icon', :type => 'image/png', :href => '/images/icon.png' }
   %body
+    %br
     #page
       %h1
-        %a{ :href => '/' }= BLOG_NAME
+        %a{ :href => '/' }= settings.blog_name
       #content
         = yield
       #tag_cloud
