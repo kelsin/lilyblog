@@ -33,7 +33,7 @@ div.post div.body dl dt, div.post div.body dl dd { float: left; margin: 0.2em 0 
 div.post div.body dl dt { font-weight: bold; clear: left; margin-right: 0.5em; width: 8em; text-align: right; }
 div.post div.body dl dd { }
 
-div.post div.body pre { border: 3px solid #a50; display: block; overflow: auto;
+div.post div.body pre { border-width: 3px; border-style: solid; display: block; overflow: auto;
                         -moz-border-radius: 0.5em; -webkit-border-radius: 0.5em;
                         padding: 0.5em 1em; margin: 1em 3em; }
 

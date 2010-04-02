@@ -54,7 +54,9 @@ helpers do
   end
 
   def feed_url
-    @tag ? "/tags/#{@tag}/feed/" : "/feed/"
+    return "/tags/#{@tag}/feed/" if @tag
+    return "/search/#{@search}/feed/" if @search
+    "/feed/"
   end
 
   def add_page(url, page)
@@ -125,6 +127,27 @@ get %r{^/(page/([0-9]+)/)?$} do |temp,page|
   @posts = Post.all(@page)
 
   haml :posts
+end
+
+# Search Feed
+get '/search/:search/feed/' do
+  @search = params[:search]
+  @title = "Posts containing #{@search}"
+  @link = "#{settings.blog_url}/search/#{@search}/"
+
+  @posts = Post.search(@search)
+
+  content_type 'application/rss+xml', :charset => 'utf-8'
+  builder :feed
+end
+
+# Search
+get '/search/:search/' do
+  @search = params[:search]
+  @title = "Posts containing #{@search}"
+  @posts = Post.search(@search)
+
+  haml :search
 end
 
 # Feed

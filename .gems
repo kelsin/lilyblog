@@ -4,4 +4,5 @@ haml
 grepper
 builder
 ultraviolet
-rack-codehighlighter
+htmlentities
+

@@ -1,7 +1,10 @@
 require 'grepper'
+require 'htmlentities'
 
 class Post
   attr_reader :meta, :file
+
+  @@coder = HTMLEntities.new
 
   def self.page_size=(size)
     @@page_size = size
@@ -44,6 +47,21 @@ class Post
   # Returns all of the posts with a certain tag
   def self.find_by_tag(tag, page = 1)
     files(tag)[limit(page)].map { |p| Post.new(p) }
+  end
+
+  def self.search(string, page = 1)
+    g = Grepper.new
+    g.pattern = /#{string}/i
+    g.files = files
+    g.run
+
+    files = []
+
+    g.results.each do |file, matches|
+      files << file if matches.size > 0
+    end
+
+    files.sort.reverse.map { |p| Post.new(p) }
   end
 
   def self.find(name)
@@ -97,7 +115,11 @@ class Post
 
   # Runs the body of the post through RDiscount and returns the html
   def body(format = nil)
-    format == :raw ? @body : RDiscount.new(@body).to_html
+    return @body if format == :raw
+
+    RDiscount.new(@body).to_html.gsub(/<pre><code>:::([-_a-zA-Z0-9]+)\n(.*?)<\/code><\/pre>/m) do |code|
+      Uv.parse(@@coder.decode($2), "xhtml", $1, false, 'twilight')
+    end
   end
 
   # The filename (without the .post) of this post

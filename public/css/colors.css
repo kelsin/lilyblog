@@ -1,0 +1,9 @@
+body { background-color: #222; color: #ddd; }
+
+/* Links */
+a:link, a:visited, a:active { color: #a50; }
+a:hover { color: #f80; }
+
+/* Code */
+div.post div.body pre { border-color: #a50; }
+

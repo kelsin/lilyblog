@@ -16,13 +16,12 @@
         var disqus_developer = 1;
         var disqus_url = '#{settings.blog_url}#{request.path}';
 
-    - [:reset, :layout, :fonts, :twilight, :lightbox].each do |css|
+    - [:reset, :layout, :fonts, :colors, :lightbox, 'themes/twilight'].each do |css|
       %link{ css_attrs(css) }
 
     %link{ :rel => 'alternate', :type => 'application/rss+xml', :title => title, :href => feed_url }
     %link{ :rel => 'icon', :type => 'image/png', :href => '/images/icon.png' }
   %body
-    %br
     #page
       %h1
         %a{ :href => '/' }= settings.blog_name
