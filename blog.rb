@@ -16,10 +16,10 @@ set :blog_desc, 'Kelsin\'s blog'
 set :page_size, Post.page_size=(10)
 
 # Code Highlighting
-use(Rack::Codehighlighter,
-    :ultraviolet, :markdown => true, :theme => 'twilight', :lines => false,
-    :element => "pre>code", :pattern => /\A:::([-_+\w]+)\s*(\n|&#x000A;)/,
-    :logging => true)
+# use(Rack::Codehighlighter,
+#     :ultraviolet, :markdown => true, :theme => 'twilight', :lines => false,
+#     :element => "pre>code", :pattern => /\A:::([-_+\w]+)\s*(\n|&#x000A;)/,
+#     :logging => true)0
 
 # Filters
 before do
