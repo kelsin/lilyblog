@@ -20,7 +20,7 @@ Post.theme = 'twilight'
 
 # Filters
 before do
-  cache_control :public, :max_age => 2592000 unless settings.environment == :development
+  cache_control :public, :must_revalidate, :max_age => 2592000 unless settings.environment == :development
 
   @tags = Post.tags.sort do |a,b|
     a[0].to_s <=> b[0].to_s
