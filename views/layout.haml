@@ -36,9 +36,10 @@
             %a{ :class => class_for_tag(tag), :href => tag_url(tag) }= tag
       #search_form
         %form{ :method => :get, :action => '/' }
-          %label{ :for => 'search' } Search
-          %input#search{ :type => 'text', :name => 'search' }
-          %input{ :type => 'submit', :value => 'Search' }
+          #search_inputs
+            %label{ :for => 'search' } Search
+            %input#search{ :type => 'text', :name => 'search' }
+            %input{ :type => 'submit', :value => 'Search' }
       %a#feed_link.rss{ :href => feed_url, :title => title } RSS
       #validation
         %a{ :href => 'http://validator.w3.org/check?uri=referer' }
