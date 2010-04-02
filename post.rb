@@ -148,9 +148,7 @@ class Post
   def body(format = nil)
     return @body if format == :raw
 
-    RDiscount.new(@body).to_html.gsub(/<pre><code>:::([-_a-zA-Z0-9]+)\n(.*?)<\/code><\/pre>/m) do |code|
-      Uv.parse(@@coder.decode($2), "xhtml", $1, false, 'twilight')
-    end
+    highlight
   end
 
   # The title of the post
@@ -190,5 +188,28 @@ class Post
   # Sort by filename
   def <=>(other)
     self.file <=> other.file
+  end
+
+  private
+
+  # Takes the raw body and subs markdown for images links
+  def images
+    @body.gsub(/\[flickr\|http:\/\/(.+?)(_.)?.(jpg|gif|png)\|([^\]]+)\]/) do |image|
+      "[![#{$4}](http://#{$1}_s.jpg \"#{$4}\")](http://#{$1}.jpg \"#{$4}\")"
+    end.gsub(/\[flickr\|([^:]+)\|([^:]+)\|([^\]]+)\]/) do |image|
+      "[![#{$3}](http://farm#{$1}.static.flickr.com/#{$2}_s.jpg \"#{$3}\")](http://farm#{$1}.static.flickr.com/#{$2}.jpg \"#{$3}\")"
+    end
+  end
+
+  # Takes the images-replaced body and renders markdown
+  def markdown
+    RDiscount.new(images).to_html
+  end
+
+  # Takes markdown code and highlights code blocks
+  def highlight
+    markdown.gsub(/<pre><code>:::([-_a-zA-Z0-9]+)\n(.*?)<\/code><\/pre>/m) do |code|
+      Uv.parse(@@coder.decode($2), "xhtml", $1, false, 'twilight')
+    end
   end
 end
