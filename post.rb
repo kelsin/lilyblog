@@ -1,108 +1,133 @@
 require 'grepper'
 require 'htmlentities'
+require 'uv'
+require 'rdiscount'
 
 class Post
-  attr_reader :meta, :file
-
+  # This is used to decode html entities from markdown output
   @@coder = HTMLEntities.new
 
-  def self.page_size=(size)
-    @@page_size = size
-  end
+  attr_reader :meta, :file
 
-  def self.files(tag = nil)
-    if tag
+  class << self
+
+    # Sets the theme to use with Ultraviolet
+    def theme=(theme)
+      @@theme = theme
+    end
+
+    # Returns the theme to use with Ultraviolet
+    def theme
+      @@theme || 'twilight'
+    end
+
+    # Sets the page size
+    def page_size=(size)
+      @@page_size = size
+    end
+
+    # Gets the page size
+    def page_size
+      @@page_size || 10
+    end
+
+    # Greps the post files for a pattern, returns an array of filenames that match
+    def grep(pattern)
       g = Grepper.new
-      g.pattern = /^tags:.*#{tag}/
+      g.pattern = pattern
       g.files = files
       g.run
 
-      files = []
+      matches = []
 
-      g.results.each do |file, matches|
-        files << file if matches.size > 0
+      g.results.each do |file, hits|
+        matches << file if hits.size > 0
       end
 
-      files
-    else
-      Dir.glob(File.join('posts','*.post')).sort.reverse
-    end
-  end
-
-  def self.limit(page)
-    offset = (page - 1) * @@page_size
-    offset..(offset + (@@page_size - 1))
-  end
-
-  # Returns all of the posts
-  def self.all(page = 1)
-    files[limit(page)].map { |p| Post.new(p) }
-  end
-
-  # Total number of posts
-  def self.count(tag = nil)
-    files(tag).size
-  end
-
-  # Returns all of the posts with a certain tag
-  def self.find_by_tag(tag, page = 1)
-    files(tag)[limit(page)].map { |p| Post.new(p) }
-  end
-
-  def self.search(string, page = 1)
-    g = Grepper.new
-    g.pattern = /#{string}/i
-    g.files = files
-    g.run
-
-    files = []
-
-    g.results.each do |file, matches|
-      files << file if matches.size > 0
+      matches
     end
 
-    files.sort.reverse.map { |p| Post.new(p) }
-  end
-
-  def self.find(name)
-    Post.new(File.join('posts',"#{name}.post"))
-  end
-
-  def self.tag(tag)
-    self.tags[tag].to_f / number_of_tags
-  end
-
-  def self.tags
-    return @counts if @counts
-
-    @counts = {}
-
-    files.map do |file|
-      Post.new(file).tags.each do |tag|
-        @counts[tag] ||= 0
-        @counts[tag] += 1
+    # Returns an array of all post filenames
+    def files(tag = nil)
+      if tag
+        grep(/^tags:.*#{tag}/)
+      else
+        Dir.glob(File.join('posts','*.post')).sort.reverse
       end
     end
 
-    return @counts
-  end
-
-  def self.number_of_tags
-    total = 0
-
-    self.tags.each do |tag, amount|
-      total += amount
+    # Given a page it returns a range to use on an array of files to get that
+    # page number
+    def limit(page)
+      offset = (page - 1) * @@page_size
+      offset..(offset + (@@page_size - 1))
     end
 
-    return total.to_f
+    # Returns all of the posts
+    def all(page = 1)
+      files[limit(page)].map { |p| Post.new(p) }
+    end
+
+    # Total number of posts
+    def count(tag = nil)
+      files(tag).size
+    end
+
+    # Returns all of the posts with a certain tag
+    def find_by_tag(tag, page = 1)
+     files(tag)[limit(page)].map { |p| Post.new(p) }
+    end
+
+    # Returns all of the posts containing a string
+    def search(pattern)
+      grep(/#{string}/i).map { |p| Post.new(p) }
+    end
+
+    # Find a post by name
+    def find(name)
+      Post.new(File.join('posts',"#{name}.post"))
+    end
+
+    # Returns the percent use of a tag
+    def tag(tag)
+      tags[tag].to_f / number_of_tags
+    end
+
+    # Returns all of the tags
+    def tags
+      counts = {}
+
+      files.map do |file|
+        Post.new(file).tags.each do |tag|
+          counts[tag] ||= 0
+          counts[tag] += 1
+        end
+      end
+
+      return counts
+    end
+
+    # Returns the total number of tags (used to find tag percent use)
+    def number_of_tags
+      total = 0
+
+      self.tags.each do |tag, amount|
+        total += amount
+      end
+
+      return total.to_f
+    end
+
+    # Strips, removes bad characters and downcases a tag
+    def clean_tag(tag)
+      tag.strip.gsub(/[^0-9a-zA-Z_-]+/, '_').downcase
+    end
   end
 
-  def self.clean_tag(tag)
-    tag.strip.gsub(/[^0-9a-zA-Z_-]+/, '_').downcase
-  end
-
+  # Loads a post from a file
   def initialize(file)
     @file = file
+
     File.open(file, 'r') do |file|
       data,@body = file.read.split(/\n(---)?\n/, 2)
 
@@ -113,18 +138,15 @@ class Post
     end
   end
 
-  # Runs the body of the post through RDiscount and returns the html
+  # Runs the body of the post through RDiscount and Ultaraviolet
+  #
+  # If you pass in :raw as the only argument you get the body strait from the file
   def body(format = nil)
     return @body if format == :raw
 
     RDiscount.new(@body).to_html.gsub(/<pre><code>:::([-_a-zA-Z0-9]+)\n(.*?)<\/code><\/pre>/m) do |code|
       Uv.parse(@@coder.decode($2), "xhtml", $1, false, 'twilight')
     end
-  end
-
-  # The filename (without the .post) of this post
-  def id
-    basename
   end
 
   # The title of the post
@@ -149,6 +171,7 @@ class Post
   def basename
     File.basename(self.file, '.post')
   end
+  alias :id :basename
 
   # The filename without the date aspect
   def slug
@@ -162,6 +185,6 @@ class Post
 
   # Sort by filename
   def <=>(other)
-    self.basename <=> other.basename
+    self.file <=> other.file
   end
 end

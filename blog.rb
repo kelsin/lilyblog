@@ -1,8 +1,6 @@
 require 'rubygems'
 require 'sinatra'
-require 'rdiscount'
 require 'haml'
-require 'uv'
 
 # Post model
 require 'post'
@@ -12,13 +10,9 @@ set :blog_name, 'M-x Kelsin'
 set :blog_url, 'http://blog.kelsin.net'
 set :blog_email, 'kelsin@valefor.com'
 set :blog_desc, 'Kelsin\'s blog'
-set :page_size, Post.page_size=(10)
 
-# Code Highlighting
-# use(Rack::Codehighlighter,
-#     :ultraviolet, :markdown => true, :theme => 'twilight', :lines => false,
-#     :element => "pre>code", :pattern => /\A:::([-_+\w]+)\s*(\n|&#x000A;)/,
-#     :logging => true)0
+Post.page_size = 10
+Post.theme = 'twilight'
 
 # Filters
 before do
@@ -99,7 +93,7 @@ get %r{^/tags/([A-Za-z0-9_-]+)/(page/([0-9]+)/)?$} do |tag,temp,page|
 
   redirect "/tags/#{tag}/" if page and @page < 2
 
-  @posts = Post.find_by_tag(@tag,@page) rescue pass
+  @posts = Post.find_by_tag(@tag,@page)
 
   haml :tags
 end
@@ -111,7 +105,7 @@ get '/tags/:tag/feed/' do
   @title = "Posts tagged with #{@tag}"
   @link = "#{settings.blog_url}/tags/#{@tag}/"
 
-  @posts = Post.find_by_tag(@tag,@page) rescue pass
+  @posts = Post.find_by_tag(@tag,@page)
 
   content_type 'application/rss+xml', :charset => 'utf-8'
   builder :feed
@@ -154,7 +148,7 @@ get '/feed/' do
   @page = 1
   @link = "#{settings.blog_url}/"
 
-  @posts = Post.all(@page) rescue pass
+  @posts = Post.all(@page)
 
   content_type 'application/rss+xml', :charset => 'utf-8'
   builder :feed
@@ -162,7 +156,7 @@ end
 
 # Single Post
 get %r{^/([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9])/([A-Za-z0-9_-]+)/$} do |year, month, day, slug|
-  @post = Post.find("#{year}#{month}#{day}_#{slug}") rescue pass
+  @post = Post.find("#{year}#{month}#{day}_#{slug}")
   @title = @post.title
 
   haml :post
