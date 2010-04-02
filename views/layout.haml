@@ -30,10 +30,9 @@
         = yield
       #tag_cloud
         %h4 Tags
-        %ul.tags
+        %p
           - @tags.each do |tag, amount|
-            %li{ :class => class_for_tag(tag) }
-              %a{ :href => tag_url(tag) }= tag
+            %a{ :class => class_for_tag(tag), :href => tag_url(tag) }= tag
       %a#feed_link.rss{ :href => feed_url, :title => title } RSS
       #validation
         %a{ :href => 'http://validator.w3.org/check?uri=referer' }

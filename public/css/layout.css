@@ -46,16 +46,15 @@ div.post div.show_comments a { float: right; font-size: 0.7em; }
 .dsq-dc-logo { display: none !important; }
 
 /* Tags */
-#tag_cloud { width: 18em; float: right; text-align: right; }
-#tag_cloud ul.tags { line-height: 1.5em; height: 1.5em; }
-#tag_cloud ul.tags li { float: right; padding-left: 0.5em; vertical-align: 20%; }
+#tag_cloud { width: 18em; float: right; text-align: right; 
+             line-height: 1.5em; height: 1.5em; }
 
 /* Individual Tag Sizes */
-#tag_cloud ul.tags li.enormous { font-size: 1.5em; }
-#tag_cloud ul.tags li.large { font-size: 1.2em; }
-#tag_cloud ul.tags li.medium { font-size: 1.0em; }
-#tag_cloud ul.tags li.small { font-size: 0.8em; }
-#tag_cloud ul.tags li.tiny { font-size: 0.6em; }
+a.enormous { font-size: 1.5em; }
+a.large { font-size: 1.2em; }
+a.medium { font-size: 1.0em; }
+a.small { font-size: 0.8em; }
+a.tiny { font-size: 0.6em; }
 
 /* Feed Link */
 a#feed_link { position: absolute; top: 0; right: 0;
