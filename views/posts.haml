@@ -12,7 +12,7 @@
         = n
       - else
         %a{ :href => page_url(n) }= n
-    - if (@page * Post.page_size) < Post.count(@tag)
+    - if @page < max_page
       %a{ :href => next_page_url } &gt;
 
 %script{ :type => 'text/javascript' }

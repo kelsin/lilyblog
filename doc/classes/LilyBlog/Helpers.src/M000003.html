@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>css_attrs (LilyBlog::Helpers)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/lilyblog/helpers.rb, line 37</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">css_attrs</span>(<span class="ruby-identifier">sheet</span>, <span class="ruby-identifier">media</span> = <span class="ruby-value str">'all'</span>)
+      { <span class="ruby-identifier">:rel</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'stylesheet'</span>,
+        <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'text/css'</span>,
+        <span class="ruby-identifier">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/css/#{sheet}.css&quot;</span>,
+        <span class="ruby-identifier">:media</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">media</span> }
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

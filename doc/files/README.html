@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Fri Apr 02 23:08:59 -0400 2010</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>Lilyblog</h1>
+<p>
+Hey, this is a tiny blog engine inspired by <a
+href="http://www.restafari.org/introducing-marley.html">Markley</a> and <a
+href="http://github.com/cloudhead/toto">Toto</a>. This blog is meant to be
+hosted in a git repository and served by a web stack with heavy http
+caching. It was written in order to be deployed on <a
+href="http://heroku.com/">Heroku</a>. Heroku allows you to push your git
+repo in order to deploy, handles rack apps, and includes varnish in
+it&#8216;s stack to handle HTTP caching properly.
+</p>
+<h2>Features</h2>
+<p>
+I used to host my blog via wordpress and decided I wanted something
+simpler. I didn&#8216;t need many of the features and didn&#8216;t want to
+edit posts out of emacs anymore. No need to have dynamic code on the page.
+</p>
+<h3>Plain text posts</h3>
+<p>
+Posts are just flat text files with a YAML section at the top and a
+Markdown section beneath. More on the post format below.
+</p>
+<h3>Tags</h3>
+<p>
+One of the few features I can&#8216;t live without is tagging. I
+don&#8216;t care about categories (I had them in the first draft, but
+quickly removed them since I don&#8216;t care about them). Tags are just
+put into the metadata for the post, and while viewing posts by tags we use
+a ruby grepping library to find the proper posts.
+</p>
+<h3>Search</h3>
+<p>
+This is basically the same code as tags, but we search for any file
+including the word (could be the title, tag or body text). This was almost
+no code to implement but does help me find post quickly. Also allows
+someone to subscribe to my site without using a tag I&#8216;ve defined in
+my post.
+</p>
+<h3>Feeds</h3>
+<p>
+There is a main blog feed, a feed for any tag, and a feed for any search
+term. They are accessible at /feed/, /tags/<em>tag</em>/feed/, and
+/search/<em>search</em>/feed/. They should be auto discovered by your
+browser if you are viewing the proper page as well. These feeds are in rss
+2.0 format.
+</p>
+<h3>Highlighting</h3>
+<p>
+Code highlighting is handled by Ultraviolet in the same format that is used
+by the Codehighlighter rack plugin. I wasn&#8216;t able to actually use the
+rack plugin and decided to just put the code into my post model. I
+didn&#8216;t need many of the features of the rack plugin, but it is
+awesome and I recommend it for anyone working with a rack app that wants to
+take advantage of code highlighting.
+</p>
+<h3>Disqus</h3>
+<p>
+I decided to use Disqus for comments. I spent a while thinking about pros
+and cons to the different comment systems, or just coding my own (Probably
+including a database). I decided that the extra code / effort wasn&#8216;t
+worth it since the end result would have less features. Hopefully Disqus
+allows people to comment easier (OpenID and other login options) while
+still allowing my pages to be completely un-dynamic.
+</p>
+<h3>Standards</h3>
+<p>
+The blog validates as XHTML 1.0 Strict and includes some helpful sitemap
+and robots routes that will help keep your blog indexed and working across
+browsers.
+</p>
+<h3>Emacs helpers.</h3>
+<p>
+I include some emacs helpers that will help you create a new post and stuff
+like that. These aren&#8216;t included in the slug if you push to Heroku.
+</p>
+<h2>Post Format</h2>
+<p>
+Posts are placed in the /posts/ directory and have a special filename that
+functions as the slug for the post.
+</p>
+<pre>
+    20100402_example-first-post.post
+</pre>
+<p>
+The first part is the date of the post (sortable), followed by an
+underscore (_) and then the slug of the post. This post is accesible at the
+following url:
+</p>
+<pre>
+    /2010/04/02/example-first-post
+</pre>
+<p>
+The displayed title of this post does not need to match this slug at all
+(my included emacs helpers keep them synced up however).
+</p>
+<p>
+Only files with an extension of .post are used so you can make drafts just
+by saving them as .draft (as my emacs modes expect) or anything else you
+want.
+</p>
+<p>
+The top of the post file is a yaml segment with metadata. This segment runs
+until the first blank line. Following that is the markdown post. For
+example:
+</p>
+<pre>
+    title: First Post
+    tags: hello, example-tag
+    date: 2010-04-02 1:45am
+
+    I love making posts using markdown!
+
+    * Lists
+    * are
+    * easy
+
+        :::ruby
+        def example_ruby(code)
+            &quot;is easy too!&quot;
+        end
+
+    ##### Headers
+
+    Using H5 headers helps keep things cleaned, but this is up to you and your
+    css you create for the blog.
+</pre>
+<p>
+Once you create a post file it will be displayed by the site. Normally you
+want to connect git pushes to the clearing of your http cache so that all
+tag info is recreated.
+</p>
+<p>
+I only designed this blog to use those 3 yaml attributes but you can put as
+much yaml as you want as long as there is not an empty line included. Any
+yaml attribute is available on the model in two ways. For example if your
+post has this header:
+</p>
+<pre>
+    title: Music Posting
+    music: Kate Nash - Mariella
+    date: Febuary 4th
+</pre>
+<p>
+You can access this attribute in the view code as:
+</p>
+<pre>
+    # The long method
+    @post.meta['music']
+
+    # The short method
+    @post.music
+</pre>
+<p>
+The method_missing method on Post looks up that attribute in the @meta
+attribute returning MethodMissing if it&#8216;s not found. This means that
+if only some posts have an attribute either use the .meta example or catch
+the exception.
+</p>
+<h2>View Files</h2>
+<p>
+I use haml as a template engine but it&#8216;s easy to replace since
+sinatra supports all of the major ones.
+</p>
+<h3>layout.haml</h3>
+<p>
+This is the main layout file displayed on every page (except feeds). Edit
+this to add new features to every page.
+</p>
+<h3>feed.builder</h3>
+<p>
+The builder template file that handles formatting the feeds. Edit this if
+you want to change the feed format.
+</p>
+<h3>posts.haml</h3>
+<p>
+This is the file that displays a list of posts. This is used on every page
+that isn&#8216;t feeds or a single post page.
+</p>
+<h3>_post.haml</h3>
+<p>
+This is the main file to display a single post. It expects a variable
+comments to be true or false. It&#8216;s true on single post pages and
+false on list pages. I like display the full blog post on the main listing
+pages.
+</p>
+<h3>Inline Templates</h3>
+<p>
+Technically the main template for a single post page ONLY calls the
+_post.haml partial. Since it&#8216;s a one line template I include it
+inline. You can delete it from blog.rb and add a new post.haml in the view
+directory if you want to customize it any more.
+</p>
+<h2>Emacs Helpers</h2>
+<p>
+My emacs file can easily be added to your config by putting it in your load
+page and adding this to your emacs config:
+</p>
+<pre>
+    ;; Blog helpers
+    (require 'blog)
+</pre>
+<p>
+It will auto load when you need it. You call the blog-create-post function
+to create a post. blog-open-post to edit one.
+</p>
+<h3>Editing posts</h3>
+<p>
+The editing mode is a mode inherited from markdown.el.
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
