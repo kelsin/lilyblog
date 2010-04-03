@@ -25,7 +25,8 @@
 
 ;;; Code:
 
-
+(define-derived-mode lilyblog-mode markdown-mode "LilyBlog"
+  "A mode to help in editing LilyBlog posts")
 
 (provide 'lilyblog)
 ;;; lilyblog.el ends here
