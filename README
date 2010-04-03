@@ -75,8 +75,8 @@ functions as the slug for the post.
 
     20100402_example-first-post.post
 
-The first part is the date of the post (sortable), followed by an underscore
-(_) and then the slug of the post. This post is accesible at the following url:
+The first part is the date of the post (sortable), followed by an underscore and
+then the slug of the post. This post is accesible at the following url:
 
     /2010/04/02/example-first-post
 
@@ -181,4 +181,5 @@ create a post. blog-open-post to edit one.
 
 === Editing posts
 
-The editing mode is a mode inherited from markdown.el.
+The editing mode is a mode inherited from
+markdown.el[http://jblevins.org/projects/markdown-mode/].
