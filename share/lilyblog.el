@@ -26,7 +26,107 @@
 ;;; Code:
 
 (define-derived-mode lilyblog-mode markdown-mode "LilyBlog"
-  "A mode to help in editing LilyBlog posts")
+  "A mode to help in editing LilyBlog posts"
+  :group 'lilyblog
+  (save-excursion
+    (goto-char (point-min))
+    (if (re-search-forward "^title: .*$" nil t)
+        (add-text-properties (line-beginning-position) (point)
+                             '(read-only
+                               "Changing the title changes the post's slug, please use M-x lilyblog-change-title"
+                               front-sticky
+                               (read-only))))
+    (goto-char (point-min))
+    (if (re-search-forward "^date: .*$" nil t)
+        (add-text-properties (line-beginning-position) (point)
+                             '(read-only
+                               "Changing the date changes the post's slug, please use M-x lilyblog-change-date"
+                               front-sticky
+                               (read-only))))))
+
+(defun lilyblog-create-post ()
+  "Creates a new post"
+  (interactive)
+  (let* ((titles (lilyblog-get-title))
+         (dates (lilyblog-dates))
+         (file (lilyblog-check-new-post-file (lilyblog-expand-filename titles dates))))
+    (if file
+        (progn
+          (switch-to-buffer (find-file-noselect (expand-file-name file lilyblog-post-directory) nil t))
+          (goto-char (point-min))
+          (insert "title: " (gethash :post titles) "\n"
+                  "date: " (gethash :post dates) "\n"
+                  "tags:\n\n")
+          (after-find-file)))))
+
+(defun lilyblog-expand-filename (titles dates)
+  (expand-file-name (concat (gethash :file dates)
+                            "_"
+                            (gethash :file titles)
+                            ".draft")
+                    lilyblog-post-directory))
+
+(defun lilyblog-check-new-post-file (file)
+  "This makes sure the file doesn't exist already. If it does it asks the user if it wants to make a backup"
+  (if (file-exists-p file)
+      (if (y-or-n-p "File already exists, should we back up the other file in order to make room? ")
+          (progn
+            (let ((buffer (get-file-buffer file)))
+              (if buffer
+                  (progn
+                    (with-current-buffer buffer
+                      (save-buffer))
+                    (kill-buffer buffer))))
+            (rename-file file (concat file ".bak") nil)
+            file)
+        (if (y-or-n-p "Overwrite existing file? ")
+            (progn
+              (let ((buffer (get-file-buffer file)))
+                (if buffer
+                    (progn
+                      (with-current-buffer buffer
+                        (set-buffer-modified-p nil))
+                      (kill-buffer buffer))))
+              (delete-file file)
+              file)))
+    file))
+
+(defun lilyblog-edit-post ()
+  "Opens up the post directory so that you can find a post to edit"
+  (interactive)
+  (let ((post-dir (concat (file-name-as-directory lilyblog-root-directory)
+                          "posts")))
+    (if (file-accessible-directory-p post-dir)
+        (dired post-dir)
+      (message "No posts created yet"))))
+
+(defun lilyblog-get-title ()
+  "Asks the user for a title and returns both versions of it"
+  (lilyblog-titles (read-from-minibuffer "Title: ")))
+
+(defun lilyblog-titles (title)
+  "Returns two versions of the title in a hash hash. The :post
+  key refers to the title in the post file while :file refers to
+  the slug"
+  (let ((titles (make-hash-table)))
+    (puthash :post title titles)
+    (puthash :file (replace-regexp-in-string "\[^a-z0-9-\]+" "-" (downcase title)) titles)
+    titles))
+
+(defun lilyblog-dates ()
+  "Formats the current date in two ways and returns a hash. :post
+  refers to the date line that will go in the post file
+  while :file refers to the date section of the file name"
+  (let ((dates (make-hash-table)))
+    (puthash :post
+             (replace-regexp-in-string "  +"
+                                       " "
+                                       (format-time-string "%A, %B %e, %Y at %l:%M%P"))
+             dates)
+    (puthash :file
+             (format-time-string "%Y%m%d")
+             dates)
+    dates))
 
 (provide 'lilyblog)
 ;;; lilyblog.el ends here

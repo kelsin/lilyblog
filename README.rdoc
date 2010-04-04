@@ -170,14 +170,24 @@ customize it any more.
 
 == Emacs Helpers
 
-My emacs file can easily be added to your config by putting it in your load page
-and adding this to your emacs config:
+My emacs file can easily be added to your config by putting share/lilyblog.el it
+in your load page and adding this to your emacs config:
 
     ;; Blog helpers
-    (require 'blog)
+    (require 'lilyblog-autoloads)
 
 It will auto load when you need it. You call the blog-create-post function to
 create a post. blog-open-post to edit one.
+
+I also recommend adding some global keybindings to your config file as
+well. Find a keybinding that you're not using and add:
+
+    ;; Helpful keybindings
+    (global-set-key [f6] 'lilyblog-create-post)
+    (global-set-key [f7] 'lilyblog-edit-post)
+
+You can also just run these commands yourself manually.
+
 
 === Editing posts
 
