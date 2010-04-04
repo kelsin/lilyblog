@@ -44,6 +44,21 @@
                                front-sticky
                                (read-only))))))
 
+
+
+(defun lilyblog-change-title (title)
+  "Sets the title of this blog post"
+  (interactive "sTitle: ")
+  (let* ((new-titles (lilyblog-titles title))
+         (current-file (buffer-file-name))
+         (new-file (replace-regexp-in-string "/\([0-9]\{8\}\)_\([^/\.]+?\)\."
+                                             (concat "/\1_"
+                                                     (gethash :file new-titles)
+                                                     ".")
+                                             current-file))
+         (inhibit-read-only t))
+    (message current-file)))
+
 (defun lilyblog-create-post ()
   "Creates a new post"
   (interactive)
@@ -71,7 +86,7 @@
   (if (file-exists-p file)
       (if (y-or-n-p "File already exists, should we back up the other file in order to make room? ")
           (progn
-            (let ((buffer (get-file-buffer file)))
+            (let ((buffer (find-buffer-visiting file)))
               (if buffer
                   (progn
                     (with-current-buffer buffer
@@ -81,7 +96,7 @@
             file)
         (if (y-or-n-p "Overwrite existing file? ")
             (progn
-              (let ((buffer (get-file-buffer file)))
+              (let ((buffer (find-buffer-visiting file)))
                 (if buffer
                     (progn
                       (with-current-buffer buffer
