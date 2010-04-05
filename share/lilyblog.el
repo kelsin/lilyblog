@@ -88,6 +88,8 @@
          (file (lilyblog-check-new-post-file (lilyblog-expand-filename titles dates))))
     (if file
         (progn
+          (if (not (file-accessible-directory-p lilyblog-post-directory))
+              (make-directory lilyblog-post-directory))
           (switch-to-buffer (find-file-noselect (expand-file-name file lilyblog-post-directory) nil t))
           (goto-char (point-min))
           (insert "title: " (gethash :post titles) "\n"
@@ -160,7 +162,7 @@
     (if (re-search-forward "^date: .*$" nil t)
         (add-text-properties (line-beginning-position) (point)
                              '(read-only
-                               "Changing the date changes the post's slug, please use M-x lilyblog-change-date"
+                               "Changing the date changes the post's slug, please use M-x lilyblog-update-date"
                                front-sticky
                                (read-only))))))
 
