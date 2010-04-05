@@ -153,7 +153,7 @@ module LilyBlog
       @file = file
 
       File.open(file, 'r') do |file|
-        data,@body = file.read.split(/\n(---)?\n/, 2)
+        data,@body = file.read.split(/\n\n/, 2)
 
         @meta = {}
         YAML::load(data).each do |key, val|

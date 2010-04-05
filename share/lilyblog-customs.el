@@ -34,5 +34,11 @@ install. lilyblog-mode will look here for posts."
   :group 'lilyblog
   :type 'directory)
 
+(defcustom lilyblog-open-magit-after-publish t
+  "This will make lilyblog mode open magit-status after the
+lilyblog-publish command"
+  :group 'lilyblog
+  :type 'boolean)
+
 (provide 'lilyblog-customs)
 ;;; lilyblog-customs.el ends here

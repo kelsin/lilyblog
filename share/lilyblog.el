@@ -28,36 +28,57 @@
 (define-derived-mode lilyblog-mode markdown-mode "LilyBlog"
   "A mode to help in editing LilyBlog posts"
   :group 'lilyblog
-  (save-excursion
+  (let ((inhibit-read-only t))
     (goto-char (point-min))
-    (if (re-search-forward "^title: .*$" nil t)
-        (add-text-properties (line-beginning-position) (point)
-                             '(read-only
-                               "Changing the title changes the post's slug, please use M-x lilyblog-change-title"
-                               front-sticky
-                               (read-only))))
-    (goto-char (point-min))
-    (if (re-search-forward "^date: .*$" nil t)
-        (add-text-properties (line-beginning-position) (point)
-                             '(read-only
-                               "Changing the date changes the post's slug, please use M-x lilyblog-change-date"
-                               front-sticky
-                               (read-only))))))
+    (re-search-forward "^$")
+    (next-line)
+    (lilyblog-set-readonly)))
 
-
+(defun lilyblog-update-date ()
+  "Sets the date of this blog post to the current date"
+  (interactive)
+  (let* ((new-dates (lilyblog-dates))
+         (current-file (buffer-file-name))
+         (new-file (replace-regexp-in-string "/[0-9]\\{8\\}_\\([^\\./]+\\)\\."
+                                             (concat "/"
+                                                     (gethash :file new-dates)
+                                                     "_\\1.")
+                                             current-file))
+         (inhibit-read-only t))
+    (save-excursion
+      (goto-char (point-min))
+      (perform-replace "^date: .*$"
+                       (concat "date: "
+                               (gethash :post new-dates))
+                       nil t nil)
+      (lilyblog-set-readonly)
+      (if (not (equal current-file new-file))
+          (progn
+            (rename-file current-file new-file)
+            (set-visited-file-name new-file nil t))))))
 
 (defun lilyblog-change-title (title)
   "Sets the title of this blog post"
   (interactive "sTitle: ")
   (let* ((new-titles (lilyblog-titles title))
          (current-file (buffer-file-name))
-         (new-file (replace-regexp-in-string "/\([0-9]\{8\}\)_\([^/\.]+?\)\."
-                                             (concat "/\1_"
+         (new-file (replace-regexp-in-string "/\\([0-9]\\{8\\}\\)_[^\\./]+\\."
+                                             (concat "/\\1_"
                                                      (gethash :file new-titles)
                                                      ".")
                                              current-file))
          (inhibit-read-only t))
-    (message current-file)))
+    (save-excursion
+      (goto-char (point-min))
+      (perform-replace "^title: .*$"
+                       (concat "title: "
+                               (gethash :post new-titles))
+                       nil t nil)
+      (lilyblog-set-readonly)
+      (if (not (equal current-file new-file))
+          (progn
+            (rename-file current-file new-file)
+            (set-visited-file-name new-file nil t))))))
 
 (defun lilyblog-create-post ()
   "Creates a new post"
@@ -73,6 +94,25 @@
                   "date: " (gethash :post dates) "\n"
                   "tags:\n\n")
           (after-find-file)))))
+
+(defun lilyblog-edit-post ()
+  "Opens up the post directory so that you can find a post to edit"
+  (interactive)
+  (if (file-accessible-directory-p lilyblog-post-directory)
+      (dired lilyblog-post-directory)
+    (message "No posts created yet")))
+
+(defun lilyblog-publish ()
+  "Renames the post from draft to post, and pulls open magit"
+  (interactive)
+  (let* ((current-file (buffer-file-name))
+         (new-file (replace-regexp-in-string "\\.draft$" ".post" current-file)))
+    (if (not (equal current-file new-file))
+        (progn
+          (rename-file current-file new-file)
+          (set-visited-file-name new-file nil t)
+          (if lilyblog-open-magit-after-publish
+              (magit-status lilyblog-post-directory))))))
 
 (defun lilyblog-expand-filename (titles dates)
   (expand-file-name (concat (gethash :file dates)
@@ -106,14 +146,23 @@
               file)))
     file))
 
-(defun lilyblog-edit-post ()
-  "Opens up the post directory so that you can find a post to edit"
-  (interactive)
-  (let ((post-dir (concat (file-name-as-directory lilyblog-root-directory)
-                          "posts")))
-    (if (file-accessible-directory-p post-dir)
-        (dired post-dir)
-      (message "No posts created yet"))))
+(defun lilyblog-set-readonly ()
+  "Sets the title and date sections of the blog readonly"
+  (save-excursion
+    (goto-char (point-min))
+    (if (re-search-forward "^title: .*$" nil t)
+        (add-text-properties (line-beginning-position) (point)
+                             '(read-only
+                               "Changing the title changes the post's slug, please use M-x lilyblog-change-title"
+                               front-sticky
+                               (read-only))))
+    (goto-char (point-min))
+    (if (re-search-forward "^date: .*$" nil t)
+        (add-text-properties (line-beginning-position) (point)
+                             '(read-only
+                               "Changing the date changes the post's slug, please use M-x lilyblog-change-date"
+                               front-sticky
+                               (read-only))))))
 
 (defun lilyblog-get-title ()
   "Asks the user for a title and returns both versions of it"
