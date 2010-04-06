@@ -1,0 +1,37 @@
+title: Already 2 new Wordpress plugins
+tags: wordpress, widgets, plugins
+date: 2009-02-22 00:42:54 -05:00
+
+Already had to add some more!
+
+##### [Last.Fm Records](http://wordpress.org/extend/plugins/lastfm-records/)
+
+This was the best Last.Fm plugin I found. I just wanted to display like 9 album
+covers and that's it. This one worked first, and I tried about 6 of them before
+this one. Most didn't look good or didn't have an option to remove the text. I
+did end up editing this one though. Near the end of the file I changed
+"plugin.php" to "options-general.php" to move the admin menu item from the
+Plugins menu to the Settings menu where ALL of my other plugins put their
+options page.
+
+##### [Sociable](http://wordpress.org/extend/plugins/sociable/)
+
+For a social bookmarks plugin I wanted the ability to display a list of small
+icons and it had to have Twitter. After searching for a while this one satisfied
+both requirements.
+
+##### [Lightbox 2](http://wordpress.org/extend/plugins/lightbox-2/)
+
+This one is pretty simple but it auto puts the lightbox affect on all images on
+my site. I want to find a good gallery plugin too. Wordpress image handling is
+very nice now but I need to find two features for my dad's site:
+
+1. Auto handling of thumbnails and main size. If I upload a HUGE photo, I want
+   wordpress to store this photo. Then make two different sizes of it to
+   display. The main size like 800x800 and then a smaller thumbnail for display
+   on a post.
+
+2. I want it to be able to watermark the big photo, either on demand or saved
+   onto it. Either way works.
+
+

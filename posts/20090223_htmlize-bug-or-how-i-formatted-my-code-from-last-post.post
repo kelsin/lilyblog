@@ -1,0 +1,66 @@
+title: Htmlize bug or How I formatted my code from last post
+tags: emacs, htmlize, code
+date: 2009-02-23 22:50:19 -05:00
+
+I recently stubled across
+[this post](http://ruslanspivak.com/2007/08/18/htmlize-your-erlang-code-buffer/)
+where Ruslan outlines a great custom Emacs function for slightly editing htmlize
+output for blog posts. The only problem is the current htmlize doesn't work with
+[cvs Emacs](http://emacs.orebokech.com/) which I am using.
+
+Luckily I found the
+[bug report](http://emacsbugs.donarmstrong.com/cgi-bin/bugreport.cgi?bug=648). Hopefully
+this gets in to htmlize soon. For now my solution is to download
+[htmlize.el](https://vgoulet.act.ulaval.ca/svn/emacs-modified/windows/trunk/htmlize.el)
+and change the line that the bug report mentions:
+
+    :::lisp
+    for f = face then (face-attribute f :inherit)
+
+becomes
+
+    :::lisp
+    for f = face then (or (face-attribute f :inherit) 'unspecified)
+
+After doing this I just added a slightly edited version of Ruslan's function
+with a load-file command to load my custom htmlize.el (over the version included
+with Debian's emacs-goodies-el package). My changes remove the font size
+setting, set overflow: auto and added a padding: 5px to the pre tags.
+
+    :::lisp
+    ;;; Function to format buffer for a blog
+    ;;;
+    ;;; Edited to not set font size,
+    ;;; set overflow: auto and add padding
+    (defun my-htmlize-region (beg end)
+      "Htmlize region and put into <pre> tag style that is left in
+       <body> tag plus add font-size: 8pt"
+      (interactive "r")
+      (let* ((buffer-faces (htmlize-faces-in-buffer))
+             (face-map (htmlize-make-face-map (adjoin 'default
+                                                      buffer-faces)))
+             (pre-tag
+              (format
+               "<pre style=\"%s padding: 5px; overflow: auto;\">"
+               (mapconcat #'identity
+                          (htmlize-css-specs
+                           (gethash 'default face-map))
+                          " ")))
+             (htmlized-reg (htmlize-region-for-paste beg end)))
+        (switch-to-buffer-other-window "*htmlized output*")
+        ;; clear buffer
+        (kill-region (point-min) (point-max))
+        ;; set mode to have syntax highlighting
+        (nxml-mode)
+        (save-excursion
+          (insert htmlized-reg))
+        (while (re-search-forward "&lt;pre&gt;" nil t)
+          (replace-match pre-tag nil nil))
+        (goto-char (point-min))))
+
+    (global-set-key [(f5)]
+                    (lambda (beg end)
+                      (interactive "r") (my-htmlize-region beg end)))
+
+And there we go! F5 now works and htmlize's the region for quick and easy paste
+into wordpress!

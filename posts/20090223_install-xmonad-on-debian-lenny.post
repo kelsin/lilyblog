@@ -1,0 +1,54 @@
+title: Install Xmonad on Debian Lenny
+tags: linux, debian, xmonad, xmobar, haskell
+date: 2009-02-23 22:36:07 -05:00
+
+I want to install a newer version of [Xmonad](http://xmonad.org/) than packaged
+with Debian Lenny on my Lenny systems in the cleanest way possible. I tried a
+bunch of things today and it turned out that the solution is really simple.
+
+It turns out that the Haskell cabal-install program solved all of my problems:
+
+* It can install it's packages into my home directory. Binaries in ~/.cabal/bin
+  and all libraries needed.
+* These libraries take precedence over system installed ghc libraries.
+* No non-stable packages are needed at all.
+* Installs the most recent versions of xmonad, xmonad-contrib and xmobar and any
+  libraries they need.
+* Cabal-install itself builds with the version of ghc in Debian Lenny (this
+  wasn't the case in previous releases and Ubuntu Hardy).
+
+This procedure installs the newest released version of Xmonad in my home
+directory along with all required libraries, xmonad-contrib and xmobar. My steps
+I used are as follows (Please check versions for cabal-install so that the wget
+command is correct):
+
+    :::shell-unix-generic
+    # First install ghc and the dev libraries that cabal-install needs
+    sudo aptitude install ghc libghc6-network-dev libghc6-mtl-dev zlib1g-dev
+
+    # Goto a temp dir and download cabal
+    cd ~/tmp
+    wget http://hackage.haskell.org/packages/archive/cabal-install/0.6.2/cabal-install-0.6.2.tar.gz
+    tar -xzvf cabal-install-0.6.2.tar.gz
+    cd cabal-install-0.6.2
+
+    # Now run the bootstrap.sh script (as your user)
+    ./bootstrap.sh
+
+    # Make sure to add ~/.cabal/bin to your patch
+    # I do this via this next line in my .bashrc
+    export PATH="$HOME/.cabal/bin:$PATH"
+
+    # Some needed libraries to build Xmonad and Xmobar
+    sudo aptitude install libx11-dev libxft-dev
+
+    # Now we install xmonad!
+    cabal update
+    cabal install xmonad
+    cabal install xmonad-contrib
+    cabal install xmobar
+
+I'm extremely happy with this setup. All of my non-packaged files are in my home
+directory safely away from my Debian Stable system. This is due to cabal install
+being able to seemlessly install into ~/.cabal which really does work great. I'm
+very excited for this tool to be included in ghc soon!

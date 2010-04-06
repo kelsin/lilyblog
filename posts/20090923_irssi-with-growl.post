@@ -1,0 +1,31 @@
+title: Irssi with Growl
+tags: irssi, os-x
+date: 2009-09-23 11:24:45 -04:00
+
+Theres been a lack of posts recently, going to try and correct that but for now
+here's a small tidbit I just figured out.
+
+I like using irssi for irc but wanted to get a mac notification when I receive a
+message with my nick in it. So the obvious choice here is to use Growl to handle
+the notification.
+
+I installed irssi from [MacPorts](http://www.macports.org/) and don't
+go into detail here about installing MacPorts. It's pretty easy and their
+website goes through a lot of it.
+
+First step was installing [Growl](http://growl.info/) and the perl bindings. You
+need to install Growl from their site and also download the SDK from the
+developer section. This is the package that mentions language bindings. Once you
+get the bindings downloaded you'll need some perl packages in order to install
+them. You can copy the Mac-Growl directory to a writable location and then run
+the commands below:
+
+    :::shell-unix-generic
+    sudo port install p5-mac-glue
+    sudo gluedialects
+    sudo gluescriptadds
+    cd directory/where/you/copyied/Mac-Growl
+    perl Makefile.pl
+    sudo make
+    make test
+    sudo make install

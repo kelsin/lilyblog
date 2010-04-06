@@ -1,0 +1,46 @@
+title: Git Ignoring already committed (tracked) files
+tags: code, git
+date: 2009-08-05 12:12:00 -04:00
+
+In my current local development environment for work I don't have access to our
+authentication mechanism. Our rails site uses a cookie from our main site. In
+order to ignore this I commonly edit my controllers with a line like:
+
+    :::ruby
+    self.current_user = User.find(5)
+
+(This is just a snippet and doesn't include the code that allows for the
+current_user method, this post is NOT about authentication in rails). This
+allows me to just work on features without having to do some complicated cookie
+copying and other stuff I'd rather not mess with.
+
+I use [magit](http://zagadka.vm.bytemark.co.uk/magit/) on
+[emacs](http://www.gnu.org/software/emacs/) to do my git management and I hate
+seeing that this controller has a change in it (same with using "git-status"). I
+don't want to accidentally commit this change either. The simple answer to this
+is to tell git to mark this file as "not changed". I found
+[this post](http://readystate4.com/2009/05/21/git-ignore-changes-in-a-working-tree-file)
+that told me about this feature. This feature exists in order to help people
+with slow filesystems but it works great for this use as well:
+
+    :::shell-unix-generic
+    $ git update-index --assume-unchanged path/to/file
+
+Now the files don't show up in any status commands or when I commit with "git
+commit -a". These files will cause git to gracefully error when merging in a
+branch that changes these files (so you can manually handle it) and it will
+remove this flag if you manually "git add" these individual files.
+
+The problem I ran into is that I want an easy way to check what files are setup
+like this. I couldn't find a git command to do this already so I added these
+aliases:
+
+    :::ini
+    [alias]
+        marked-unchanged = !git ls-files -v | grep ^[a-z]
+        mu = !git ls-files -v | grep ^[a-z]
+
+Now both "git marked-unchanged" and "git mu" show me a list of files that are
+set this way so I don't forget. I want to add magit commands to show this and
+set this as well but that will be another day and another post.
+

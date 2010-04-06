@@ -1,0 +1,24 @@
+title: Installing Ultraviolet on my Mac
+tags: code, ruby, os-x
+date: Thu Apr  1 10:35:49 2010
+
+I spent forever looking for an alternative to
+[Ultraviolet](http://ultraviolet.rubyforge.org/). I originally thought I
+wouldn't be able to use this library on [Heroku](http://heroku.com/) due to it
+needing a wierd regexp library. Turns out Heroku already installs this library
+making the install of ultraviolet a snap! Unfortunately I was having issues
+installing ultraviolet on my mac.
+
+You need the oniguruma library installed. Since I use macports anyway this was
+the easy part.
+
+    :::shell-unix-generic
+    $ sudo port install oniguruma
+
+The hard part was that the oniguruma gem wasn't finding the files it
+needed. Turns out I just needed to tell it where to look.
+
+    :::shell-unix-generic
+    $ sudo gem install ultraviolet -- --with-opt-dir=/opt/local
+
+Bingo! Time to add awesome syntax code to my blog!

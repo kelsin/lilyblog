@@ -1,0 +1,37 @@
+title: Word Press Plugins
+tags: wordpress, widgets, plugins
+date: 2009-02-21 14:47:14 -05:00
+
+I've added three plugins to my wordpress install and I'm pretty excited about
+all three.
+
+##### [Twitter Tools](http://wordpress.org/extend/plugins/twitter-tools/installation/http://wordpress.org/extend/plugins/twitter-tools/installation/)
+
+First we have a very complex twitter plugin. Along with the widget you see on
+the right, this plugin also manages posting to twitter when I make a blog
+post. I'm not using any other features but the plugin can post blog posts with
+every tweet, a digest of every day's tweets, or a digest of every week's
+tweets. This plugin does not support multiple widgets on the page (because it
+does so much other stuff and saves your settings outside of widget settings) but
+there are others that do in case you want to follow multiple twitter accounts on
+your blog.
+
+##### [WoW Armory](http://wordpress.org/extend/plugins/wow-armory/)
+
+Second we have a
+[WoW-Armory](http://www.wowarmory.com/character-sheet.xml?r=Bronzebeard&amp;n=Kelsin)
+plugin which you can see on the right of the blog (below the twitter
+plugin). Very simple install and this does support having multiple widgets with
+different characters if that was important (eventually I will probably do that
+with my alts).
+
+##### [Related Posts by Tags Widget](http://wordpress.org/extend/plugins/related-posts-by-tags/)
+
+This is a very simple related posts widget. It only displays on a single post's
+page (so click on the post title to see it in the sidebar on the right). This
+one is simple and just sorts by tag relations (not fancy keywords or
+anything). It does what I want for now and if I see related posts not syncing up
+I will fix it.
+
+For now this settles my desire to install plugins. We'll see if I add any more
+in the future :)

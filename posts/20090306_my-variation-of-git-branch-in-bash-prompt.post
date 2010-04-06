@@ -1,0 +1,77 @@
+title: My variation of Git branch in bash prompt
+tags: linux, ubuntu, debian, bash
+date: 2009-03-06 13:55:51 -05:00
+
+
+After reading another cool blog post about putting your current git branch in
+your bash prompt I decided I needed to try this out. Once I got it working I
+added in color coding to see the status of the current checkout as well!
+
+First off, you need bash-completion and git installed on your server
+(bash-completion and git-core on Debian/Ubuntu). Once installed you can enable
+bash completion in the system wide bash file (/etc/bash.bashrc) or in your own
+~/.bashrc by adding these lines (Clearly if you are not on Debian/Ubuntu double
+check file paths):
+
+    :::shell-unix-generic
+    # Completion
+    if [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
+
+Once this is all set you should have a function called __git_ps1 available. Try
+it out by just running "__git_ps1" on your command line from a git repo. You
+should get the branch name returned inside parenthesis's.
+
+Now comes my variations on how to include this in your prompt. My entire
+~/.bash_prompt file can be found on my
+[git repo](http://git.dreaminginlyrics.com/?p=configs.git;a=blob_plain;f=.bash_aliases;hb=HEAD
+"Bash Prompt Config File"). I source this file into my
+[~/.bashrc](http://git.dreaminginlyrics.com/?p=configs.git;a=blob_plain;f=.bashrc;hb=HEAD
+"Bashrc"). The two most interesting parts are the function that determines the
+color of the branch based on git-status output and the function that gets the
+branch name. Branch name is pretty simple. We check that the __git_ps1 function
+is available and if it is, check that we're in a branch using it. If we are we
+echo the branch name. Pretty clean.
+
+    :::shell-unix-generic
+    prompt_git_branch() {
+        if type -p __git_ps1; then
+            branch=$(__git_ps1 '%s')
+            if [ -n "$branch" ]; then
+                echo -e "$branch"
+            fi
+        fi
+    }
+
+The next function has to grep stuff out of git status to determine what state
+the repo is in. If we are completely up to date we use green. If I have local
+changes it's blue. If we have files in our index ready to be committed I use
+red. This is really great with my home directory cause it helps remind me to add
+new dotfiles that I don't care about to .gitignore (or commit them if they
+should be public config files).
+
+    :::shell-unix-generic
+    prompt_git_branch_color() {
+        if type -p __git_ps1; then
+            branch=$(__git_ps1 '%s')
+            if [ -n "$branch" ]; then
+                status=$(git status 2> /dev/null)
+
+                if $(echo $status | grep 'added to commit' &> /dev/null); then
+                    # If we have modified files but no index (blue)
+                    echo -e "\033[1;34m"
+                else
+                    if $(echo $status | grep 'to be committed' &> /dev/null); then
+                        # If we have files in index (red)
+                        echo -e "\033[1;31m"
+                    else
+                        # If we are completely clean (green)
+                        echo -e "\033[1;32m"
+                    fi
+                fi
+            fi
+        fi
+    }
+
+It took some playing but I finally found the right final line to correctly tell bash which characters in the prompt are visible. If anyone has a good way of making these functions smaller or faster I'd love to hear it. I had some trouble making sure that the functions were always executed (not just on a new shell's creation, but on every display of PS1). The speed is FINE on all of my computers but more speed never hurts.

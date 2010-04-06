@@ -1,0 +1,92 @@
+title: Audio Interface Problems
+tags: music, recording, zendrum, apple
+date: 2009-03-16 21:23:28 -04:00
+
+So a long time ago I had a Echo Gina 20-bit audio card. I recorded my first
+album with it. It was great. I upgraded it eventually for a Layla 20-bit. This
+card was also great. Both of these were PCI card devices and worked flawlessly.
+
+Then college hit and I decided that I need a true 24bit high khz audio interface
+so I sold the Layla and bought a MOTU Ultralite. Into the world of Firewire
+audio I go. For the most part this card worked ok. I was annoyed at a couple of
+the problems I had with it. First it would never work in WDM mode for Sonar,
+only ASIO. At random times it also wouldn't work but not too often. I was using
+it with a HP Firewire PCI card that had a VIA chipset.
+
+Then I decided that when I got my Zendrum I would need to get a portable
+solution. I decided to use my new work laptop that was a Intel Core 2 Duo
+machine with 4 gigs of ram. Much better than my 2 gig Intel Pentium 4 desktop. I
+bought my zendrum and BFD2 and took my work laptop home to install XP and a
+bunch of software. Software all installed fine until I tried to install the MOTU
+drivers. I got a blue screen of death. I was incredibly mad. I barely used this
+card and now it won't work? For the life of me I couldn't get the Ultralite to
+work right even when I got around the Blue Screen of death by rebooting the
+computer a bunch of times and praying. Fed up I decided to sell it and a bunch
+of other audio gear in order to buy a new sound card and a new Line6 Pod
+(Upgrading my Pod Pro to a Pod X3 Live).
+
+Ebay stuff worked out and I decided I would buy a Presonus FP10 since they were
+selling really cheap and it meant I could sell off my Mic Pre-amps as well. This
+is another Firewire card. When I first installed it I was thrilled. It installed
+fine and had really low latency. As I played Zendrum more and more the sound
+card would sometimes not work at all. No sound, no midi, no anything. I
+eventually found out that these symptoms can mean a bad firewire chipset. I
+ordered a new Firewire PCMCIA to replace the crappy Bestbuy Dynex card. I also
+tried plugging the Presonus into my desktop. Even on the desktop some things
+wouldn't work the way they should. I also discovered that BFD2 chokes on my
+desktop as well. Latency was high and CPU usage was higher. My desktop is
+seriously dead as far as sound production goes.
+
+As I began to look at my situation I realized another big problem. The FP10
+isn't portable at all. One of my reasons to record on my laptop is the Zendrum
+might mean playing live somewhere other than my apartment. The FP10 really
+doesn't solve this issue in a nice way. This and all of my firewire issues (and
+the fact that Apple doesn't even have a Firewire port on the new Macbook's) made
+me decide to return the Presonus using Musician's Friend's return policy. I
+haven't even gotten my new PCMCIA card yet but I'm pretty sure this is the right
+choice.
+
+I'm also trying to figure out what I want to replace my Desktop with when the
+time comes. Right now I have my Asus laptop (running Debian, going great) which
+I love to work on and my work Laptop is a lovely Lenovo x61s with Debian. My
+desktop mainly used to server as my music studio and also my gaming machine. My
+gaming recently has largely come down to ONLY World of Warcraft (on the computer
+at least). This makes me want to go Mac. If I switched my desktop for a Mac
+laptop, I'd have a portable music studio that could play wow. My entire
+computing life could be in a posix world. This sounds very enticing.
+
+The problem I'm struggling with is justifying the cost. For the cost of a Apple
+Macbook (or Macbook pro) I can build a SCREAMING windows system (top of the line
+Nvidia card, 8 gigs of ram, etc). Is paying a ton of money for a Apple laptop
+worth it? My co-workers say it is if I put a non-zero value to my time. That's a
+good point. I've spent a lot of time and money into trying to get an audio card
+working nicely in windows and been having many issues. Most are not huge but I'm
+VERY sick of googling firewire cards to see what chipset they have.
+
+My current setup: I'm now using the crappy audio interface that's in my Line6
+Pod X3 Live. It can record my vocals and guitars (what I need anyway) and
+playback latency is great. No problems when using my laptop. My desktop still
+can't handle BFD2 so I'm afraid the current desktop really is dead to me as far
+as music goes. I'm using my Korg Padkontrol as my midi interface. Ridiculous but
+it works. This doesn't solve my long term problem of Zendrum playing live
+though. I really don't want to bring my guitar pedal and midi pad controller to
+a gig to function as a audio interface and midi interface. It will work for now
+since I don't have anything better but eventually this needs to change.
+
+What I'm thinking about: A Apple laptop with a nice small portable audio
+interface. This does mean that I have to ditch my Sonar/Project 5 software which
+would be very sad. I would want to keep using Rapture and Dimension of course
+but since they have VST, AU and RTAS versions I feel pretty confident that I'll
+be able to use them on anything. My current thoughts are pointing me towards the
+Digidesign Protools LE series and getting a MBox2 maybe? I've heard these things
+work really nice (and are stable) and then I'd have a Protools system if I
+wanted to keep using Protools. I'm also heavily looking into Ableton and Logic
+as other options. Clearly if I don't go Protools I would be able to try out
+other audio interfaces. I'm looking at Edirol and Echo ones. Echo doesn't make a
+non-firewire interface but I'm hoping that on the Macbook I'd have better luck.
+
+Any advice? I'm looking for any options for audio interface and recording
+software to use with an Apple laptop. I'm also open to going back to MOTU for
+audio interface. Anything that's solid and works well with the Apple
+Laptop. Solid enough to gig with!
+

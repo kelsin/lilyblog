@@ -1,0 +1,16 @@
+title: Apache and SSL
+tags: linux, ubuntu, debian, server
+date: 2009-06-12 20:47:52 -04:00
+
+I'm going to be moving my mail to my linode soon (basically want to stop using
+GMail for most things) and in the process I'm learning about setting up
+webmail. To do this properly I did want to get my apache set up using a
+self-signed certificate. Clearly I don't need my personal server to be signed by
+a CA since it's only for me, I just don't want people sniffing packets.
+
+I used [these][1] [two][2] links to do this. The guide is great and worked
+flawlessly for me!
+
+[1]: http://www.tc.umn.edu/~brams006/selfsign.html
+
+[2]: http://www.tc.umn.edu/~brams006/selfsign_ubuntu.html

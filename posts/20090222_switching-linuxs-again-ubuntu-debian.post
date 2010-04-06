@@ -1,0 +1,55 @@
+title: "Switching Linux's Again: Ubuntu -> Debian"
+tags: linux, ubuntu, debian, xmonad, emacs
+date: 2009-02-22 23:55:16 -05:00
+
+Just switched my company laptop from [Ubuntu](http://www.ubuntu.com/) to
+[Debian](http://www.debian.org/). I switch Linux's a lot. Right now I'm doing it
+cause I ran into some nasty bug's on Ubuntu. I'm sure I will be installing
+Ubuntu on lots of machines soon anyway, especially in April.
+
+[flickr|4|3605/3302048185_f24210531b|My work laptop's desktop as of 02-22-2009]
+
+The first bug came when I first installed Intrepid. I ran into the
+[bug](https://bugs.launchpad.net/ubuntu/intrepid/+source/linux/+bug/286285)
+where the kernel fills my logs with errors from the wireless driver. Having your
+root partition fill up does some weird things. Around this point I installed
+Hardy again to get on a more stable platform. I recently tried to update to
+Intrepid again (this bug was solved in a recent kernel) but ran into other
+issues. Just small ones.
+
+Then I read the Lenny release announcement on Valentines day, so that set this
+in motion. I can't read release notes without wanting to install something.
+
+My work laptop is a Lenovo (IBM) Thinkpad X61s. I love this machine for work and
+the install went smoothly. I havn't had trouble with installing Linux in a long
+time. I did hit
+[this bug](http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=497359) with ncmpc,
+but I normally disable ipv6 anyway. A quick edit of `/etc/modprobe.d/aliases`
+and `/etc/hosts` to comment out ipv6 stuff and I'm all set. I really want to get
+into Debian packaging so I might use Lenny as a reason to do so. I've already
+told myself that I will stick to stable software as much as possible for work,
+and use my home Desktop and Laptop to experiment with different software.
+
+[flickr|http://farm4.static.flickr.com/3404/3302048187_3dd038da05.jpg|Drcox Emacs 02-22-2009]
+
+I'm using my compiled [xmonad](http://xmonad.org/) from my home directory at the
+moment (Had cabal install everything in .cabal on Ubuntu) but when I get ghc
+running again I will post about it.
+
+After that I've installed the
+[sid version of emacs](http://emacs.orebokech.com/) (along with
+[ttf-bitstream-vera](http://packages.debian.org/lenny/ttf-bitstream-vera),
+[haskell-mode](http://packages.debian.org/lenny/haskell-mode),
+[ruby-elisp](http://packages.debian.org/lenny/ruby-elisp) and
+[emacs-goodies-el](http://packages.debian.org/lenny/emacs-goodies-el)) so that I
+can use emacs 23 (I rely on a lot of features from 23, the least of which is
+nice fonts!). I've also installed [mpd](http://packages.debian.org/lenny/mpd)
+(with [mpc](http://packages.debian.org/lenny/mpc),
+[sonata](http://packages.debian.org/lenny/sonata) and
+[ncmpc](http://packages.debian.org/lenny/ncmpc), my xmonad config relies on
+this). My XMonad key bindings for audio keys work again (they didn't on
+Intrepid, just simple windows manager keybindings that run mpc).
+
+The one other thing I had to do to get my system back was make sure option
+`"XkbOptions" "ctrl:nocaps"` was in the keyboard driver section of the xorg.conf
+file. Can't live with my Caps-Lock key not being another Left-Control!

@@ -1,0 +1,27 @@
+title: Instant PhpBB3 Speed Improvements
+tags: debian, server, php
+date: 2009-10-02 18:47:56 -04:00
+
+Recently at work we've installed a php accelerator onto one of our php apps. We
+were having load problems on the box ([Moodle](http://moodle.org/) installs) and
+the accelerator helped solve the problem. This got me thinking and I decided to
+install an accelerator on my [Linode](http://www.linode.com/index.cfm) in order
+to speed up my
+[World of Warcraft guild forums](http://forums.cakeordeath-guild.com) (a
+[phpbb3](http://www.phpbb.com/) install)
+
+After doing some reading I decided to try out
+[Xcache](http://xcache.lighttpd.net/). I don't have ANY opinions on which
+accelerator is better (this isn't the one we chose at work for Moodle). I chose
+this one for the SOLE reason that Debian Lenny had it in the
+repository. Installing it was DEAD simple:
+
+    :::shell-unix-generic
+    sudo aptitude install php5-xcache
+    sudo /etc/init.d/apache2 restart
+
+Can't get any simpler. Now my phpbb forum pages load INSTANTLY. It's absolutely
+amazing and awesome.
+
+This is making me want to move this blog over to the
+[Linode](http://www.linode.com/index.cfm) very fast!

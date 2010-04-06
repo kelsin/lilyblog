@@ -1,0 +1,57 @@
+title: Rails App Templates
+tags: code, ruby, ruby-on-rails
+date: 2009-04-17 10:44:42 -04:00
+
+I finally got around to creating a ruby app template. Of course my recent ruby
+work is not centered around creating new apps but I'm still glad I did it. Will
+save my some time!
+
+You can read more about
+[app templates](http://m.onkey.org/2008/12/4/rails-templates) or what a
+[great screencast](http://railscasts.com/episodes/148-app-templates-in-rails-2-3)
+about them at other places. I don't want to just repeat what others have already
+said but basically I created one so far and put it up on my
+[github account](http://github.com/Kelsin/rails-templates/tree/master).
+
+The one question I have is about running this on a server without the haml gem
+already installed. I don't really want it to try and install the gem in my home
+directory so we'll see how that works out next time I have to do it. For now on
+my current linode it sets up a new rails project pretty nicely for my needs.
+
+The one other interesting aspect of my template is my config system that I just
+wrote. It's only two lines and it's heavily stealing from other blogs. I never
+really had a good app config system and I don't really want to use a plugin so I
+quickly wrote my own. It basically supports one config file (config/config.yml)
+and lets you setup default settings and then override / add to the defaults with
+per environment settings as well. For my wow raiding site this is working pretty
+well.
+
+Here is the initializer file (config/initializers/config.rb):
+
+    :::ruby
+    CONFIG = YAML.load_file("#{RAILS_ROOT}/config/config.yml") || {}
+    CONFIG = (CONFIG['default'] || {}).
+               symbolize_keys.merge((CONFIG[RAILS_ENV] || {}).
+                                      symbolize_keys)
+
+And my config.yml file from my raid site. This site uses a development
+environment (all defaults) and then two different production environments since
+I run the site for two different guilds. You can see how the "dota" environment
+inherits the auth setting while the "cod" environment adds a forum setting that
+I use when using phpbb authentication.
+
+    :::yaml
+    default:
+      guild: Your Guild
+      auth: login
+
+    cod:
+      guild: Cake or Death
+      forum: http://forum.cakeordeath-guild.com
+      auth: phpbb
+
+    dota:
+      guild: Daughters of the Alliance
+
+Pretty simple and now I don't even have to do anything to new rails projects to
+use it!
