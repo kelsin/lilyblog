@@ -133,6 +133,7 @@ end
 get '/sitemap.xml/' do
   @posts = LilyBlog::Post.all
 
+  content_type 'application/xml', :charset => 'utf-8'
   builder :sitemap
 end
 
