@@ -84,7 +84,12 @@ module LilyBlog
       end
 
       # Returns all of the posts
-      def all(page = 1)
+      def all
+        files.map { |p| Post.new(p) }
+      end
+
+      # Returns a page of posts
+      def get(page = 1)
         paged = files[limit(page)]
 
         paged ? paged.map { |p| Post.new(p) } : []

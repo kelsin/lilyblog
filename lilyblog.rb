@@ -5,19 +5,12 @@
 #
 # This is the main file containing the LilyBlog sinatra blogging engine.
 
-# Rubygems
 require 'rubygems'
-
-# Sinatra web framework
 require 'sinatra'
-
-# Haml template engine
 require 'haml'
 
-# Root location
-LILYBLOG_ROOT = File.dirname(__FILE__)
-
 # Add lib directory to load path
+LILYBLOG_ROOT = File.dirname(__FILE__)
 $:.unshift "#{LILYBLOG_ROOT}/lib"
 
 # LilyBlog files
@@ -113,7 +106,7 @@ get '/' do
   @page = [params[:page].to_i, 1].max
   redirect '/' if params[:page] and @page < 2
 
-  @posts = LilyBlog::Post.all(@page)
+  @posts = LilyBlog::Post.get(@page)
 
   haml :posts
 end
@@ -123,7 +116,7 @@ get '/feed/' do
   @page = 1
   @link = "#{settings.blog_url}/"
 
-  @posts = LilyBlog::Post.all(@page)
+  @posts = LilyBlog::Post.get(@page)
 
   content_type 'application/rss+xml', :charset => 'utf-8'
   builder :feed
@@ -134,6 +127,13 @@ get %r{^/([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9])/([A-Za-z0-9_-]+)/$} do
   @post = LilyBlog::Post.find("#{year}#{month}#{day}_#{slug}")
 
   haml :post
+end
+
+# Sitemap
+get '/sitemap.xml/' do
+  @posts = LilyBlog::Post.all
+
+  builder :sitemap
 end
 
 __END__
