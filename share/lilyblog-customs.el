@@ -34,6 +34,12 @@ install. lilyblog-mode will look here for posts."
   :group 'lilyblog
   :type 'directory)
 
+(defcustom lilyblog-image-host nil
+  "This is a server where you are going to store images. This has
+to be a valid tramp string to your image folder."
+  :group 'lilyblog
+  :type 'string)
+
 (defcustom lilyblog-open-magit-after-publish t
   "This will make lilyblog mode open magit-status after the
 lilyblog-publish command"
