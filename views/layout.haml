@@ -26,7 +26,7 @@
     - if settings.environment == :development
       :javascript
         var disqus_developer = 1;
-        var disqus_url = '#{settings.blog_url}#{request.path}';
+        var disqus_url = 'http://#{settings.blog_domain}#{request.path}';
 
     - [:reset, :layout, :fonts, :colors, :lightbox, 'themes/twilight'].each do |css|
       %link{ css_attrs(css) }

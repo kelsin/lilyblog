@@ -19,7 +19,7 @@ require 'lilyblog/helpers'
 
 # Config
 set :blog_name, 'M-x Kelsin'
-set :blog_url, 'http://blog.kelsin.net'
+set :blog_domain, 'blog.kelsin.net'
 set :blog_email, 'kelsin@valefor.com'
 set :blog_desc, 'Kelsin\'s blog'
 
@@ -39,6 +39,8 @@ LilyBlog::Post.theme = 'twilight'
 before do
   # Cache settings, cache everything for a month!
   cache_control :public, :must_revalidate, :max_age => 2592000 unless settings.environment == :development
+
+  if settings.environment == :production and request.host != settings.blog_domain
 
   # Load tags and sort them for views
   @tags = LilyBlog::Post.tags.sort do |a,b|
@@ -73,7 +75,7 @@ end
 get '/tags/:tag/feed/' do
   @page = 1
   @tag = LilyBlog::Post.clean_tag(params[:tag])
-  @link = "#{settings.blog_url}#{tag_url(@tag)}"
+  @link = "http://#{settings.blog_domain}#{tag_url(@tag)}"
 
   @title = "Posts tagged with #{@tag}"
 
@@ -94,7 +96,7 @@ end
 # Search Feed
 get '/search/:search/feed/' do
   @search = params[:search].strip.downcase
-  @link = "#{settings.blog_url}#{search_url(@search)}"
+  @link = "http://#{settings.blog_domain}#{search_url(@search)}"
 
   @posts = LilyBlog::Post.search(@search)
 
@@ -117,7 +119,7 @@ end
 # Feed
 get '/feed/' do
   @page = 1
-  @link = "#{settings.blog_url}/"
+  @link = "http://#{settings.blog_domain}/"
 
   @posts = LilyBlog::Post.get(@page)
 

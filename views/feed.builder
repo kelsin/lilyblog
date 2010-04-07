@@ -11,8 +11,8 @@ xml.rss :version => "2.0" do
     @posts.each do |post|
       xml.item do
         xml.title post.title
-        xml.link "#{settings.blog_url}#{post_url(post)}"
-        xml.guid "#{settings.blog_url}#{post_url(post)}"
+        xml.link "http://#{settings.blog_domain}#{post_url(post)}"
+        xml.guid "http://#{settings.blog_domain}#{post_url(post)}"
         xml.description post.body
         xml.pubDate post.date
       end
