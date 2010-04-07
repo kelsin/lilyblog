@@ -5,7 +5,7 @@ date: 2009-05-25 23:14:20 -04:00
 This is just a quicky but I had to setup a new laptop and remembered how easy it
 is to install a new git home directory into a clean Mac OS X home directory. I'm
 using the Mac OS X git binaries gotten from
-[http://code.google.com/p/git-osx-installer/downloads/list?can=3](http://code.google.com/p/git-osx-installer/downloads/list?can=3
+[their google code page](http://code.google.com/p/git-osx-installer/downloads/list?can=3
 "Git Mac Binaries") (also linked from the main git site).
 
 From my home directory on the new mac:
@@ -17,4 +17,4 @@ From my home directory on the new mac:
     git config branch.master.merge refs/heads/master
     git pull
 
-Obviously replace the username@repo with your home directory repository.
+Obviously replace the `username@repo` with your home directory repository.
