@@ -18,10 +18,10 @@ require 'lilyblog/post'
 require 'lilyblog/helpers'
 
 # Config
-set :blog_name, 'M-x Kelsin'
-set :blog_domain, 'blog.kelsin.net'
-set :blog_email, 'kelsin@valefor.com'
-set :blog_desc, 'Kelsin\'s blog'
+set :blog_name, 'Blog Name'
+set :blog_domain, 'url.to.blog.com'
+set :blog_email, 'admin@blog.com'
+set :blog_desc, 'Description of Blog'
 
 # Analytics
 # set :property_id, nil
