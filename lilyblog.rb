@@ -23,6 +23,9 @@ set :blog_url, 'http://blog.kelsin.net'
 set :blog_email, 'kelsin@valefor.com'
 set :blog_desc, 'Kelsin\'s blog'
 
+# Analytics
+# set :property_id, nil
+
 # Page titles
 set :posts_title, 'Posts'
 set :tag_title, lambda { |tag| "Posts tagged with #{tag}" }
