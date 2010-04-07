@@ -41,6 +41,8 @@ before do
   cache_control :public, :must_revalidate, :max_age => 2592000 unless settings.environment == :development
 
   if settings.environment == :production and request.host != settings.blog_domain
+    redirect "http://#{settings.blog_domain}#{request.path}"
+  end
 
   # Load tags and sort them for views
   @tags = LilyBlog::Post.tags.sort do |a,b|
