@@ -24,7 +24,7 @@ set :blog_email, 'kelsin@valefor.com'
 set :blog_desc, 'Kelsin\'s blog'
 
 # Analytics
-# set :property_id, nil
+set :property_id, 'UA-4197984-2'
 
 # Page titles
 set :posts_title, 'Posts'
