@@ -16,7 +16,7 @@ config push.default matching](http://pivotallabs.com/users/alex/blog/articles/88
 
 After reading that helpful post I decided to set my git config globally:
 
-    ::::shell-unix-generic
+    :::shell-unix-generic
     git config --global push.default tracking
 
 If anyone knows more about this stuff I'd love to hear opinions about tracking
