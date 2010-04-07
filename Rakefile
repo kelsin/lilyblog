@@ -1,13 +1,38 @@
-require 'rubygems'
-#require 'dm-core'
-require 'sequel'
-require 'yaml'
-require 'rdiscount'
+# Add lib directory to load path
+LILYBLOG_ROOT = File.dirname(__FILE__)
+$:.unshift "#{LILYBLOG_ROOT}/lib"
 
+# LilyBlog files
+require 'lilyblog/post'
+require 'lilyblog/helpers'
+
+desc "List all Posts"
+task :posts do
+  LilyBlog::Post.all.reverse.each do |post|
+    puts "#{post.filedate.strftime('%Y/%m/%d')} - #{post}"
+  end
+end
+
+desc "List all Tags"
+task :tags do
+  LilyBlog::Post.tags.sort do |a,b|
+    a[0].to_s <=> b[0].to_s
+  end.each do |tag|
+    puts "#{tag[0]} - #{tag[1]}"
+  end
+end
+
+desc "List all Urls"
+task :urls do
+  LilyBlog::Post.all.reverse.each do |post|
+    puts "/#{post.filedate.strftime('%y/%m/%d')}/#{post.slug}"
+  end
+end
 
 desc "Creates posts from Wordpress DB"
 namespace :import do
   task :wordpress do
+    import_requires
 
     raise "Please specify a database in the DATABASE environment variable" unless ENV['DATABASE']
     DB = Sequel.connect(ENV['DATABASE'])
@@ -55,4 +80,11 @@ namespace :import do
       end
     end
   end
+end
+
+def import_requires
+  require 'rubygems'
+  require 'sequel'
+  require 'yaml'
+  require 'rdiscount'
 end
