@@ -46,5 +46,17 @@ lilyblog-publish command"
   :group 'lilyblog
   :type 'boolean)
 
+(defcustom lilyblog-dev-host "localhost"
+  "This is the host to connect to if you want to view a post
+locally"
+  :group 'lilyblog
+  :type 'string)
+
+(defcustom lilyblog-dev-post "3000"
+  "This is the port of the locally running web server to connect
+to when you want to view a post locally"
+  :group 'lilyblog
+  :type 'string)
+
 (provide 'lilyblog-customs)
 ;;; lilyblog-customs.el ends here

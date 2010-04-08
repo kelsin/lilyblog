@@ -34,6 +34,21 @@
     (next-line)
     (lilyblog-set-readonly)))
 
+(defun lilyblog-open-post ()
+  "Saves the current post, and then opens it in a web
+browser. This relies on you running a local server at
+localhost:3000 with your blog running"
+  (interactive)
+  (save-buffer)
+  (let ((current-file (buffer-file-name)))
+    (system-open (concat "http://"
+                         lilyblog-dev-host
+                         ":"
+                         lilyblog-dev-post
+                         (replace-regexp-in-string "\\([0-9]\\{4\\}\\)\\([0-9][0-9]\\)\\([0-9][0-9]\\)_\\([^\\./]+\\)\\..*$"
+                                                   "/\\1/\\2/\\3/\\4/"
+                                                   (file-name-nondirectory current-file))))))
+
 (defun lilyblog-insert-image (file name title)
   "Inserts an image tag into the current post from a file on the filesystem"
   (interactive))
