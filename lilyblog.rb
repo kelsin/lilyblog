@@ -44,6 +44,8 @@ before do
     redirect "http://#{settings.blog_domain}#{request.path}"
   end
 
+  @page = 1
+
   # Load tags and sort them for views
   @tags = LilyBlog::Post.tags.sort do |a,b|
     a[0].to_s <=> b[0].to_s
@@ -53,6 +55,12 @@ end
 # Helpers
 helpers do
   include LilyBlog::Helpers
+end
+
+# Robots file (dynamic for url)
+get '/robots.txt' do
+  content_type 'text/plain', :charset => 'utf-8'
+  erb :robots
 end
 
 # Match all routes that don't end in / and return a 301 redirect to add a /
@@ -75,7 +83,6 @@ end
 
 # Tag Feed
 get '/tags/:tag/feed/' do
-  @page = 1
   @tag = LilyBlog::Post.clean_tag(params[:tag])
   @link = "http://#{settings.blog_domain}#{tag_url(@tag)}"
 
@@ -120,7 +127,6 @@ end
 
 # Feed
 get '/feed/' do
-  @page = 1
   @link = "http://#{settings.blog_domain}/"
 
   @posts = LilyBlog::Post.get(@page)
