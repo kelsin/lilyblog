@@ -7,6 +7,7 @@
 
 require 'rubygems'
 require 'sinatra'
+require 'erb'
 require 'haml'
 
 # Add lib directory to load path
