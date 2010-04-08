@@ -14,7 +14,7 @@
     - if settings.property_id and settings.environment == :production
       :javascript
         var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-XXXXX-X']);
+        _gaq.push(['_setAccount', '#{settings.property_id}']);
         _gaq.push(['_trackPageview']);
 
         (function() {
