@@ -45,9 +45,9 @@ localhost:3000 with your blog running"
                          lilyblog-dev-host
                          ":"
                          lilyblog-dev-post
-                         (replace-regexp-in-string "\\([0-9]\\{4\\}\\)\\([0-9][0-9]\\)\\([0-9][0-9]\\)_\\([^\\./]+\\)\\..*$"
+                         (replace-regexp-in-string "\\([0-9]\\{4\\}\\)\\([0-9][0-9]\\)\\([0-9][0-9]\\)_\\([^\\./]+\\)$"
                                                    "/\\1/\\2/\\3/\\4/"
-                                                   (file-name-nondirectory current-file))))))
+                                                   (file-name-nondirectory (file-name-sans-extension current-file)))))))
 
 (defun lilyblog-insert-image (file name title)
   "Inserts an image tag into the current post from a file on the filesystem"
