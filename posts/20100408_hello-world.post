@@ -1,0 +1,17 @@
+title: Hello World
+date: Thursday, April 8, 2010 at 7:54am
+tags: hello
+
+Here is your first post! Feel free to delete it of course.
+
+    :::ruby
+    Example.code :highlighted => true do |is|
+        is.awesome
+    end
+
+##### Header Example
+
+* List a
+* List b
+* List c
+

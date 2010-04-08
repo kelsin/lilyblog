@@ -24,7 +24,7 @@ set :blog_email, 'admin@blog.com'
 set :blog_desc, 'Description of Blog'
 
 # Analytics
-# set :property_id, nil
+set :property_id, nil
 
 # Page titles
 set :posts_title, 'Posts'
