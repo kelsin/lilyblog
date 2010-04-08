@@ -34,6 +34,10 @@
     (next-line)
     (lilyblog-set-readonly)))
 
+(defun lilyblog-insert-image (file name title)
+  "Inserts an image tag into the current post from a file on the filesystem"
+  (interactive))
+
 (defun lilyblog-update-date ()
   "Sets the date of this blog post to the current date"
   (interactive)
