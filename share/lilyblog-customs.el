@@ -36,7 +36,9 @@ install. lilyblog-mode will look here for posts."
 
 (defcustom lilyblog-image-host nil
   "This is a server where you are going to store images. This has
-to be a valid tramp string to your image folder."
+to be a valid tramp string to your image folder. This means that
+it can be a local folder string as well. As long as a copy file
+command works with this string, you can use it."
   :group 'lilyblog
   :type 'string)
 
