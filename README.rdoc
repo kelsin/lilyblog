@@ -131,9 +131,7 @@ You can access this attribute in the view code as:
     @post.music
 
 The method_missing method on Post looks up that attribute in the @meta
-attribute returning MethodMissing if it's not found. This means that if only
-some posts have an attribute either use the .meta example or catch the
-exception.
+attribute.
 
 == View Files
 
