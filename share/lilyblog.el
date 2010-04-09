@@ -70,7 +70,7 @@ localhost:3000 with your blog running"
   (interactive)
   (save-buffer)
   (let ((current-file (buffer-file-name)))
-    (system-open (lilyblog-dev-url))))
+    (lilyblog-system-open (lilyblog-dev-url))))
 
 (defun lilyblog-update-date ()
   "Sets the date of this blog post to the current date"
@@ -252,6 +252,19 @@ the current name"
             (gethash :month parts) "/"
             (gethash :day parts) "/"
             (gethash :slug parts) "/")))
+
+(cond ((string-match "darwin" (symbol-name system-type))
+       (defun lilyblog-system-open (item)
+         "Opens an item with open"
+         (call-process "/usr/bin/env" nil nil nil
+                       "open"
+                       item)))
+      ((string-match "linux" (symbol-name system-type))
+       (defun lilyblog-system-open (item)
+         "Opens an item with gnome-open"
+         (call-process "/usr/bin/env" nil nil nil
+                       "gnome-open"
+                       item))))
 
 (provide 'lilyblog)
 ;;; lilyblog.el ends here
