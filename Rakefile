@@ -29,6 +29,28 @@ task :urls do
   end
 end
 
+namespace :images do
+  desc "Resizes images to images proper for the web, and places them in /tmp"
+  task :create, :image, :name do |t, args|
+    require 'rubygems'
+    require 'RMagick'
+
+    # Check that our image exists
+    raise "#{args[:image]} doesn't exist" unless File.exists?(args[:image])
+
+    ext = File.extname(args[:image]) == '.jpg' ? 'jpg' : 'png'
+
+    image_filename = "/tmp/#{args[:name]}.#{ext}"
+    thumb_filename = "/tmp/#{args[:name]}.thumbnail.#{ext}"
+
+    # Process and save these images
+    img = Magick::Image.read(args[:image]).first
+    img.resize_to_fit(1024).write image_filename
+    img.resize_to_fill(125).write thumb_filename
+    img.destroy!
+  end
+end
+
 desc "Creates posts from Wordpress DB"
 namespace :import do
   task :wordpress do

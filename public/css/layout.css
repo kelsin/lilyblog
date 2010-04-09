@@ -24,7 +24,7 @@ div.post div.body { clear: both; margin: 0.5em 0; }
 div.post div.body ul { margin: 0.5em 1em; }
 div.post div.body ul li { margin: 0.2em 0; }
 
-div.post div.body p { margin: 0.5em 0; }
+div.post div.body p { margin: 0.5em 0; clear: both; overflow: auto; }
 div.post div.body h5 { margin-top: 1em; }
 div.post div.body h5 + p { margin: 0.2em 0; }
 
@@ -41,6 +41,12 @@ div.post div.body pre { border-width: 3px; border-style: solid; display: block; 
                         -moz-border-radius: 0.5em; -webkit-border-radius: 0.5em;
                         padding: 0.5em 1em; margin: 1em 3em; }
 
+/* Images */
+div.post div.body a img { border-width: 3px; border-style: solid;
+                          -moz-border-radius: 0.3em; -webkit-border-radius: 0.3em;
+                          height: 125px; width: 125px;
+                          float: left; margin: 0.5em 1em 0.5em 0; }
+
 /* Post Comments */
 div.post div.number_comments { overflow: auto; line-height: 1.2em; }
 div.post div.number_comments a { float: right; font-size: 0.7em; }
@@ -50,7 +56,7 @@ div.post div.show_comments a { float: right; font-size: 0.7em; }
 .dsq-dc-logo { display: none !important; }
 
 /* Tags */
-#tag_cloud { width: 18em; float: right; text-align: right; 
+#tag_cloud { width: 18em; float: right; text-align: right;
              line-height: 1.5em; height: 1.5em; }
 
 /* Individual Tag Sizes */

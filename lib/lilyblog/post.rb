@@ -191,7 +191,6 @@ module LilyBlog
     # Allows you to grab meta elements using normal methods
     def method_missing(id, *args)
       return @meta[id.to_sym] if @meta.has_key? id.to_sym
-      raise NoMethodError
     end
 
     # The filename of this post without the .post

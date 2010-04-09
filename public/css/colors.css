@@ -7,3 +7,6 @@ a:hover { color: #f80; }
 /* Code */
 div.post div.body pre { border-color: #a50; }
 
+/* Images */
+div.post div.body a img { border-color: #a50; }
+

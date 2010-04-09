@@ -34,17 +34,36 @@ install. lilyblog-mode will look here for posts."
   :group 'lilyblog
   :type 'directory)
 
-(defcustom lilyblog-image-host nil
-  "This is a server where you are going to store images. This has
-to be a valid tramp string to your image folder."
+(defcustom lilyblog-image-folder "~/images/"
+  "This is a folder where you are going to store images. This has
+to be a valid tramp string to your image folder. This means that
+it can be a local folder string as well. As long as a copy file
+command works with this string, you can use it."
   :group 'lilyblog
   :type 'string)
 
-(defcustom lilyblog-open-magit-after-publish t
-  "This will make lilyblog mode open magit-status after the
-lilyblog-publish command"
+(defcustom lilyblog-image-url "http://localhost:3000/"
+  "This is the location that you want images linked to in the
+blog post."
   :group 'lilyblog
-  :type 'boolean)
+  :type 'string)
+
+(defcustom lilyblog-dev-path "/"
+  "Path on dev server to blog."
+  :group 'lilyblog
+  :type 'string)
+
+(defcustom lilyblog-dev-host "localhost"
+  "This is the host to connect to if you want to view a post
+locally"
+  :group 'lilyblog
+  :type 'string)
+
+(defcustom lilyblog-dev-post "3000"
+  "This is the port of the locally running web server to connect
+to when you want to view a post locally"
+  :group 'lilyblog
+  :type 'string)
 
 (provide 'lilyblog-customs)
 ;;; lilyblog-customs.el ends here
