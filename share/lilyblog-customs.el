@@ -40,11 +40,10 @@ to be a valid tramp string to your image folder."
   :group 'lilyblog
   :type 'string)
 
-(defcustom lilyblog-open-magit-after-publish t
-  "This will make lilyblog mode open magit-status after the
-lilyblog-publish command"
+(defcustom lilyblog-dev-path "/"
+  "Path on dev server to blog."
   :group 'lilyblog
-  :type 'boolean)
+  :type 'string)
 
 (defcustom lilyblog-dev-host "localhost"
   "This is the host to connect to if you want to view a post

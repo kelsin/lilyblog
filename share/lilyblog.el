@@ -25,14 +25,43 @@
 
 ;;; Code:
 
+;; Regular expression to find keywords
+(defconst lilyblog-keyword-regexp '("^[a-z]+: "))
+
+;; Major Mode line
 (define-derived-mode lilyblog-mode markdown-mode "LilyBlog"
   "A mode to help in editing LilyBlog posts"
   :group 'lilyblog
-  (let ((inhibit-read-only t))
-    (goto-char (point-min))
-    (re-search-forward "^$")
-    (next-line)
-    (lilyblog-set-readonly)))
+  (font-lock-add-keywords nil lilyblog-keyword-regexp)
+  (lilyblog-goto-post))
+
+;; Keybindings
+(define-key lilyblog-mode-map (kbd "C-c g") 'lilyblog-goto-tags)
+(define-key lilyblog-mode-map (kbd "C-c b") 'lilyblog-goto-body)
+(define-key lilyblog-mode-map (kbd "C-c i") 'lilyblog-insert-image)
+(define-key lilyblog-mode-map (kbd "C-c o") 'lilyblog-open-post)
+(define-key lilyblog-mode-map (kbd "C-c d") 'lilyblog-update-date)
+(define-key lilyblog-mode-map (kbd "C-c t") 'lilyblog-change-title)
+(define-key lilyblog-mode-map (kbd "C-c p") 'lilyblog-publish)
+(define-key lilyblog-mode-map (kbd "C-c u") 'lilyblog-unpublish)
+
+;; Movement commands
+(defun lilyblog-goto-body ()
+  "Moves cursor to the first line of the body"
+  (interactive)
+  (goto-char (point-min))
+  (re-search-forward "\n\n"))
+
+(defun lilyblog-goto-tags ()
+  "Moves cursor to the tags line"
+  (interactive)
+  (goto-char (point-min))
+  (re-search-forward "^tags: "))
+
+;; Editing Post Functions
+(defun lilyblog-insert-image (file name title)
+  "Inserts an image tag into the current post from a file on the filesystem"
+  (interactive))
 
 (defun lilyblog-open-post ()
   "Saves the current post, and then opens it in a web
@@ -41,17 +70,7 @@ localhost:3000 with your blog running"
   (interactive)
   (save-buffer)
   (let ((current-file (buffer-file-name)))
-    (system-open (concat "http://"
-                         lilyblog-dev-host
-                         ":"
-                         lilyblog-dev-post
-                         (replace-regexp-in-string "\\([0-9]\\{4\\}\\)\\([0-9][0-9]\\)\\([0-9][0-9]\\)_\\([^\\./]+\\)$"
-                                                   "/\\1/\\2/\\3/\\4/"
-                                                   (file-name-nondirectory (file-name-sans-extension current-file)))))))
-
-(defun lilyblog-insert-image (file name title)
-  "Inserts an image tag into the current post from a file on the filesystem"
-  (interactive))
+    (system-open (lilyblog-dev-url))))
 
 (defun lilyblog-update-date ()
   "Sets the date of this blog post to the current date"
@@ -70,7 +89,6 @@ localhost:3000 with your blog running"
                        (concat "date: "
                                (gethash :post new-dates))
                        nil t nil)
-      (lilyblog-set-readonly)
       (if (not (equal current-file new-file))
           (progn
             (rename-file current-file new-file)
@@ -93,7 +111,6 @@ localhost:3000 with your blog running"
                        (concat "title: "
                                (gethash :post new-titles))
                        nil t nil)
-      (lilyblog-set-readonly)
       (if (not (equal current-file new-file))
           (progn
             (rename-file current-file new-file)
@@ -123,23 +140,33 @@ localhost:3000 with your blog running"
       (dired lilyblog-post-directory)
     (message "No posts created yet")))
 
-(defun lilyblog-publish ()
-  "Renames the post from draft to post, and pulls open magit"
-  (interactive)
-  (let* ((current-file (buffer-file-name))
-         (new-file (replace-regexp-in-string "\\.draft$" ".post" current-file)))
-    (if (not (equal current-file new-file))
-        (progn
-          (rename-file current-file new-file)
-          (set-visited-file-name new-file nil t)
-          (if lilyblog-open-magit-after-publish
-              (magit-status lilyblog-post-directory))))))
+(defun lilyblog-rename-file (new-file)
+  "Renames current file to new-file if the name is different than
+the current name"
+  (if (not (equal (buffer-file-name) new-file))
+      (progn
+        (rename-file (buffer-file-name) new-file)
+        (set-visited-file-name new-file nil t))))
 
-(defun lilyblog-expand-filename (titles dates)
+(defun lilyblog-set-extension (ext)
+  "Renames the extension on the current file"
+  (lilyblog-rename-file (concat (file-name-sans-extension (buffer-file-name))
+                                "." ext)))
+
+(defun lilyblog-publish ()
+  "Renames the post from .draft to .post"
+  (interactive)
+  (lilyblog-set-extension "post"))
+
+(defun lilyblog-unpublish ()
+  "Renames the post from .post to .draft"
+  (interactive)
+  (lilyblog-set-extension "draft"))
+
+(defun lilyblog-expand-filename (titles dates &optional type)
   (expand-file-name (concat (gethash :file dates)
-                            "_"
-                            (gethash :file titles)
-                            ".draft")
+                            "_" (gethash :file titles)
+                            "." (if type type "draft"))
                     lilyblog-post-directory))
 
 (defun lilyblog-check-new-post-file (file)
@@ -166,24 +193,6 @@ localhost:3000 with your blog running"
               (delete-file file)
               file)))
     file))
-
-(defun lilyblog-set-readonly ()
-  "Sets the title and date sections of the blog readonly"
-  (save-excursion
-    (goto-char (point-min))
-    (if (re-search-forward "^title: .*$" nil t)
-        (add-text-properties (line-beginning-position) (point)
-                             '(read-only
-                               "Changing the title changes the post's slug, please use M-x lilyblog-change-title"
-                               front-sticky
-                               (read-only))))
-    (goto-char (point-min))
-    (if (re-search-forward "^date: .*$" nil t)
-        (add-text-properties (line-beginning-position) (point)
-                             '(read-only
-                               "Changing the date changes the post's slug, please use M-x lilyblog-update-date"
-                               front-sticky
-                               (read-only))))))
 
 (defun lilyblog-get-title ()
   "Asks the user for a title and returns both versions of it"
@@ -212,6 +221,37 @@ localhost:3000 with your blog running"
              (format-time-string "%Y%m%d")
              dates)
     dates))
+
+(defconst lilyblog-file-regexp "\\([0-9]\\{4\\}\\)\\([0-9][0-9]\\)\\([0-9][0-9]\\)_\\([^\\./]+\\)\\.\\([a-z]\\)+$")
+
+(defun lilyblog-get-post-file ()
+  "Gets the current buffers file name without directory"
+  (file-name-nondirectory (buffer-file-name)))
+
+(defun lilyblog-get-post-file-part (part)
+  "Returns a certain match from the regexp post file"
+  (replace-regexp-in-string lilyblog-file-regexp
+                            (format "\\%d" part)
+                            (lilyblog-get-post-file)))
+
+(defun lilyblog-parse-filename ()
+  "Returns the current post information from filename"
+  (let ((data (make-hash-table)))
+    (puthash :year (lilyblog-get-post-file-part 1) data)
+    (puthash :month (lilyblog-get-post-file-part 2) data)
+    (puthash :day (lilyblog-get-post-file-part 3) data)
+    (puthash :slug (lilyblog-get-post-file-part 4) data)
+    (puthash :type (lilyblog-get-post-file-part 5) data)
+    data))
+
+(defun lilyblog-dev-url ()
+  "Returns the dev url to use for viewing the current post"
+  (let ((parts (lilyblog-parse-filename)))
+    (concat "http://" lilyblog-dev-host ":" lilyblog-dev-post lilyblog-dev-path
+            (gethash :year parts) "/"
+            (gethash :month parts) "/"
+            (gethash :day parts) "/"
+            (gethash :slug parts) "/")))
 
 (provide 'lilyblog)
 ;;; lilyblog.el ends here

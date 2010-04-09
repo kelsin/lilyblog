@@ -188,8 +188,27 @@ well. Find a keybinding that you're not using and add:
 
 You can also just run these commands yourself manually.
 
-
 === Editing posts
 
 The editing mode is a mode inherited from
-markdown.el[http://jblevins.org/projects/markdown-mode/].
+markdown.el[http://jblevins.org/projects/markdown-mode/]. Lilyblog mode just
+adds helpful commands and highlighting for the labels in the header section.
+
+==== Keybindings
+
+C-c g:: Goto the tag header line
+C-c b:: Goto the first line of the post body
+C-c o:: Open post in your browser (more info below)
+C-c d:: Update the date of the post to now
+C-c t:: Change post title
+C-c p:: Publish the post (just renames file from .draft to .post)
+C-c u:: Unpublish the post (renames file from .post to .draft)
+C-c i:: Insert an image file (more info below)
+
+=== Opening Current Post
+
+This just figures out the current file's url and opens it in a browser. The
+domain and port of the server is configurable via customize.
+
+=== Inserting Images
+
