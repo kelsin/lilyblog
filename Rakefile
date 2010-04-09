@@ -45,7 +45,9 @@ namespace :images do
 
     # Process and save these images
     img = Magick::Image.read(args[:image]).first
-    img.resize_to_fit(1024).write image_filename
+    img.change_geometry!('800x800>') do |c, r, img|
+      img.resize!(c,r)
+    end.write image_filename
     img.resize_to_fill(125).write thumb_filename
     img.destroy!
   end
