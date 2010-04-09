@@ -33,7 +33,7 @@
   "A mode to help in editing LilyBlog posts"
   :group 'lilyblog
   (font-lock-add-keywords nil lilyblog-keyword-regexp)
-  (lilyblog-goto-post))
+  (lilyblog-goto-body))
 
 ;; Keybindings
 (define-key lilyblog-mode-map (kbd "C-c g") 'lilyblog-goto-tags)
