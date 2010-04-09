@@ -213,3 +213,4 @@ domain and port of the server is configurable via customize.
 
 === Inserting Images
 
+You can use customize to set where to save images.
