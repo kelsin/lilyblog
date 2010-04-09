@@ -40,6 +40,7 @@
 (define-key lilyblog-mode-map (kbd "C-c b") 'lilyblog-goto-body)
 (define-key lilyblog-mode-map (kbd "C-c i") 'lilyblog-insert-image)
 (define-key lilyblog-mode-map (kbd "C-c o") 'lilyblog-open-post)
+(define-key lilyblog-mode-map (kbd "C-c h") 'lilyblog-open-github)
 (define-key lilyblog-mode-map (kbd "C-c d") 'lilyblog-update-date)
 (define-key lilyblog-mode-map (kbd "C-c t") 'lilyblog-change-title)
 (define-key lilyblog-mode-map (kbd "C-c p") 'lilyblog-publish)
@@ -71,6 +72,11 @@ localhost:3000 with your blog running"
   (save-buffer)
   (let ((current-file (buffer-file-name)))
     (lilyblog-system-open (lilyblog-dev-url))))
+
+(defun lilyblog-open-github ()
+  "Opens the LilyBlog github page"
+  (interactive)
+  (lilyblog-system-open "http://github.com/Kelsin/lilyblog"))
 
 (defun lilyblog-update-date ()
   "Sets the date of this blog post to the current date"
