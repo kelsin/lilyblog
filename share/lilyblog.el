@@ -62,7 +62,20 @@
 ;; Editing Post Functions
 (defun lilyblog-insert-image (file name title)
   "Inserts an image tag into the current post from a file on the filesystem"
-  (interactive))
+  (interactive "fImage File: \nsFilename: \nsTitle: ")
+  (lilyblog-run-rake-task "images:create" file name)
+  (let* ((ext (lilyblog-new-extension file))
+         (image-file (concat name "." ext))
+         (thumb-file (concat name ".thumbnail." ext)))
+    (copy-file (concat "/tmp/" image-file)
+               (concat lilyblog-image-folder image-file))
+    (copy-file (concat "/tmp/" thumb-file)
+               (concat lilyblog-image-folder thumb-file)))
+  (insert (lilyblog-image-tag image-file thumb-file title)))
+
+(defun lilyblog-image-tag (image-file thumb-file title)
+  "Inserts markdown for a linked image"
+  (insert (format "[![%s](%s)](%s)" title image-file thumb-file)))
 
 (defun lilyblog-open-post ()
   "Saves the current post, and then opens it in a web
