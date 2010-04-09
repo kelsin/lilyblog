@@ -203,6 +203,7 @@ C-c t:: Change post title
 C-c p:: Publish the post (just renames file from .draft to .post)
 C-c u:: Unpublish the post (renames file from .post to .draft)
 C-c i:: Insert an image file (more info below)
+C-c I:: Insert an image tag into the file (more info below)
 
 === Opening Current Post
 
@@ -211,4 +212,21 @@ domain and port of the server is configurable via customize.
 
 === Inserting Images
 
-You can use customize to set where to save images.
+Using C-c I you can insert an image tag into the post. This function asks you
+for a image file url, a thumbnail file url and then finally the title of the
+image and inserts the tag for you.
+
+I also include a function that can take an image, resize it (creating a
+thumbnail as well), uploads it to a server, then inserts the link. This requires
+customizing some variables (M-x customize-group lilyblog) and then running C-c
+i.
+
+First emacs will run a rake task that resizes the image and drops it into
+/tmp. After this it will ask you if you want to upload the files to your
+server. If you do it will copy them into a folder based on the post date. Either
+way it finally inserts the image link.
+
+If you choose to upload your files and the files already exist you will get an
+error. The rake task however will overwrite files in /tmp without
+caring. Nothing happens to the original image file you selected.
+

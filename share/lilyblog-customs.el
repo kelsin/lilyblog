@@ -34,7 +34,7 @@ install. lilyblog-mode will look here for posts."
   :group 'lilyblog
   :type 'directory)
 
-(defcustom lilyblog-image-folder nil
+(defcustom lilyblog-image-folder "~/images/"
   "This is a folder where you are going to store images. This has
 to be a valid tramp string to your image folder. This means that
 it can be a local folder string as well. As long as a copy file
@@ -42,7 +42,7 @@ command works with this string, you can use it."
   :group 'lilyblog
   :type 'string)
 
-(defcustom lilyblog-image-url nil
+(defcustom lilyblog-image-url "http://localhost:3000/"
   "This is the location that you want images linked to in the
 blog post."
   :group 'lilyblog

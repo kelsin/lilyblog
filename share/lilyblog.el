@@ -39,6 +39,7 @@
 (define-key lilyblog-mode-map (kbd "C-c g") 'lilyblog-goto-tags)
 (define-key lilyblog-mode-map (kbd "C-c b") 'lilyblog-goto-body)
 (define-key lilyblog-mode-map (kbd "C-c i") 'lilyblog-insert-image)
+(define-key lilyblog-mode-map (kbd "C-c I") 'lilyblog-image-tag)
 (define-key lilyblog-mode-map (kbd "C-c o") 'lilyblog-open-post)
 (define-key lilyblog-mode-map (kbd "C-c h") 'lilyblog-open-github)
 (define-key lilyblog-mode-map (kbd "C-c d") 'lilyblog-update-date)
@@ -59,23 +60,92 @@
   (goto-char (point-min))
   (re-search-forward "^tags: "))
 
+(defun lilyblog-run-rake-task (task &rest args)
+  "Runs a rake rake in the post directory"
+  (let ((default-directory (expand-file-name (format "%s/.." (buffer-file-name)))))
+    (process-file "rake" nil nil nil "-f" "Rakefile" (lilyblog-format-rake-task task args))))
+
+(defun lilyblog-format-rake-task (task &optional args)
+  "Returns the name of a rake task from the arguments and task name"
+  (if args
+      (format "%s[%s]" task
+              (mapconcat 'shell-quote-argument args ","))
+    task))
+
 ;; Editing Post Functions
 (defun lilyblog-insert-image (file name title)
   "Inserts an image tag into the current post from a file on the filesystem"
   (interactive "fImage File: \nsFilename: \nsTitle: ")
   (lilyblog-run-rake-task "images:create" file name)
-  (let* ((ext (lilyblog-new-extension file))
-         (image-file (concat name "." ext))
-         (thumb-file (concat name ".thumbnail." ext)))
-    (copy-file (concat "/tmp/" image-file)
-               (concat lilyblog-image-folder image-file))
-    (copy-file (concat "/tmp/" thumb-file)
-               (concat lilyblog-image-folder thumb-file)))
-  (insert (lilyblog-image-tag image-file thumb-file title)))
+  (let ((images (lilyblog-image-names file name)))
+    (lilyblog-copy-image images)
+    (lilyblog-image-tag-from-images images title)))
 
-(defun lilyblog-image-tag (image-file thumb-file title)
-  "Inserts markdown for a linked image"
-  (insert (format "[![%s](%s)](%s)" title image-file thumb-file)))
+(defun lilyblog-new-extension (file)
+  "Returns the new extension we're going to us for this image
+based on the original filename"
+  (if (equal (file-name-extension file) "jpg")
+      "jpg"
+    "png"))
+
+(defun lilyblog-image-names (file name)
+  "Returns an alist of the two image names"
+  (let ((ext (lilyblog-new-extension file)))
+    (list (cons 'image (concat name "." ext))
+          (cons 'thumb (concat name ".thumbnail." ext)))))
+
+(defun lilyblog-image-name (images)
+  "Returns the main image name from the images alist"
+  (cdr (assoc 'image images)))
+
+(defun lilyblog-thumb-name (images)
+  "Returns the thumbnail image name from the images alist"
+  (cdr (assoc 'thumb images)))
+
+(defun lilyblog-post-image-folder ()
+  (let ((date (gethash :date (lilyblog-parse-filename))))
+    (format "%s%s/" lilyblog-image-folder date)))
+
+(defun lilyblog-create-post-image-folder ()
+  "Makes sure we have access to this folder"
+  (if (file-writable-p lilyblog-image-folder)
+      (let ((folder (lilyblog-post-image-folder)))
+        (if (file-writable-p folder)
+            folder
+          (progn (make-directory folder)
+                 folder)))))
+
+(defun lilyblog-copy-file (image folder)
+  (let ((from (format "/tmp/%s" image))
+        (to (concat folder image)))
+    (message (format "Copying %s to %s" from to))
+    (copy-file from to)))
+
+(defun lilyblog-copy-image (images)
+  "Copies the image files over to the server"
+  (if (y-or-n-p (format "Should we copy images to %s?" (lilyblog-post-image-folder)))
+      (let ((folder (lilyblog-create-post-image-folder)))
+        (if folder
+            (let ((image (lilyblog-image-name images))
+                  (thumb (lilyblog-thumb-name images)))
+              (lilyblog-copy-file image folder)
+              (lilyblog-copy-file thumb folder))))))
+
+(defun lilyblog-full-image-url (image)
+  "Returns the full url for an image"
+  (let ((date (gethash :date (lilyblog-parse-filename))))
+    (format "%s%s/%s" lilyblog-image-url date image)))
+
+(defun lilyblog-image-tag (image thumb title)
+  "Formats a markdown tag for an image"
+  (interactive "sImage Link: \nsImage Thumbnail Link: \nsImage Title: ")
+  (insert (format "[![%s](%s \"%s\")](%s \"%s\")" title thumb title image title)))
+
+(defun lilyblog-image-tag-from-images (image title)
+  "Formats markdown for a linked image"
+  (lilyblog-image-tag (lilyblog-full-image-url (lilyblog-image-name images))
+                      (lilyblog-full-image-url (lilyblog-thumb-name images))
+                      title))
 
 (defun lilyblog-open-post ()
   "Saves the current post, and then opens it in a web
@@ -261,6 +331,9 @@ the current name"
     (puthash :day (lilyblog-get-post-file-part 3) data)
     (puthash :slug (lilyblog-get-post-file-part 4) data)
     (puthash :type (lilyblog-get-post-file-part 5) data)
+    (puthash :date (concat (gethash :year data)
+                           (gethash :month data)
+                           (gethash :day data)) data)
     data))
 
 (defun lilyblog-dev-url ()
