@@ -7,7 +7,10 @@ Just switched my company laptop from [Ubuntu](http://www.ubuntu.com/) to
 cause I ran into some nasty bug's on Ubuntu. I'm sure I will be installing
 Ubuntu on lots of machines soon anyway, especially in April.
 
-[flickr|4|3605/3302048185_f24210531b|My work laptop's desktop as of 02-22-2009]
+[![Drcox Desktop 02-22-2009](http://images.kelsin.net/20090222/drcox-2009-02-22-desktop.thumbnail.png
+"Drcox Desktop
+02-22-2009")](http://images.kelsin.net/20090222/drcox-2009-02-22-desktop.png
+"Drcox Desktop 02-22-2009")
 
 The first bug came when I first installed Intrepid. I ran into the
 [bug](https://bugs.launchpad.net/ubuntu/intrepid/+source/linux/+bug/286285)
@@ -30,7 +33,10 @@ into Debian packaging so I might use Lenny as a reason to do so. I've already
 told myself that I will stick to stable software as much as possible for work,
 and use my home Desktop and Laptop to experiment with different software.
 
-[flickr|http://farm4.static.flickr.com/3404/3302048187_3dd038da05.jpg|Drcox Emacs 02-22-2009]
+[![Drcox Emacs 02-22-2009](http://images.kelsin.net/20090222/drcox-2009-02-22-emacs.thumbnail.png
+"Drcox Emacs
+02-22-2009")](http://images.kelsin.net/20090222/drcox-2009-02-22-emacs.png
+"Drcox Emacs 02-22-2009")
 
 I'm using my compiled [xmonad](http://xmonad.org/) from my home directory at the
 moment (Had cabal install everything in .cabal on Ubuntu) but when I get ghc
