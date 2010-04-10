@@ -113,8 +113,15 @@ module LilyBlog
       end
 
       # Find a post by name
-      def find(name)
-        Post.new(File.join(LILYBLOG_ROOT, 'posts',"#{name}.post"))
+      def find(name, allow_draft = false)
+        post = File.join(LILYBLOG_ROOT, 'posts', "#{name}.post")
+        draft = File.join(LILYBLOG_ROOT, 'posts', "#{name}.draft")
+
+        if File.exists? post
+          Post.new(post)
+        elsif allow_draft and File.exists? draft
+          Post.new(draft)
+        end
       end
 
       # Returns the percent use of a tag
@@ -216,18 +223,9 @@ module LilyBlog
 
     private
 
-    # Takes the raw body and subs markdown for images links
-    def images
-      @body.gsub(/\[flickr\|http:\/\/(.+?)(_.)?.(jpg|gif|png)\|([^\]]+)\]/) do |image|
-        "[![#{$4}](http://#{$1}_s.jpg \"#{$4}\")](http://#{$1}.jpg \"#{$4}\")"
-      end.gsub(/\[flickr\|([^:]+)\|([^:]+)\|([^\]]+)\]/) do |image|
-        "[![#{$3}](http://farm#{$1}.static.flickr.com/#{$2}_s.jpg \"#{$3}\")](http://farm#{$1}.static.flickr.com/#{$2}.jpg \"#{$3}\")"
-      end
-    end
-
     # Takes the images-replaced body and renders markdown
     def markdown
-      RDiscount.new(images).to_html
+      RDiscount.new(@body).to_html
     end
 
     # Takes markdown code and highlights code blocks

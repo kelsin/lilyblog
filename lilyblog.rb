@@ -19,22 +19,7 @@ require 'lilyblog/post'
 require 'lilyblog/helpers'
 
 # Config
-set :blog_name, 'M-x Kelsin'
-set :blog_domain, 'blog.kelsin.net'
-set :blog_email, 'kelsin@valefor.com'
-set :blog_desc, 'Kelsin\'s blog'
-
-# Analytics
-set :property_id, 'UA-4197984-2'
-
-# Page titles
-set :posts_title, 'Posts'
-set :tag_title, lambda { |tag| "Posts tagged with #{tag}" }
-set :search_title, lambda { |search| "Posts containing #{search}" }
-
-# Settings for the post class
-LilyBlog::Post.page_size = 10
-LilyBlog::Post.theme = 'twilight'
+require 'config'
 
 # Filters
 before do
@@ -138,7 +123,7 @@ end
 
 # Single Post
 get %r{^/([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9])/([A-Za-z0-9_-]+)/$} do |year, month, day, slug|
-  @post = LilyBlog::Post.find("#{year}#{month}#{day}_#{slug}")
+  @post = LilyBlog::Post.find("#{year}#{month}#{day}_#{slug}", settings.environment == :development)
 
   haml :post
 end

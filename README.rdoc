@@ -78,7 +78,7 @@ functions as the slug for the post.
 The first part is the date of the post (sortable), followed by an underscore and
 then the slug of the post. This post is accesible at the following url:
 
-    /2010/04/02/example-first-post
+    /2010/04/02/example-first-post/
 
 The displayed title of this post does not need to match this slug at all (my
 included emacs helpers keep them synced up however).
