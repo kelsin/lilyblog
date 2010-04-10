@@ -7,7 +7,7 @@ xml.rss :version => "2.0", 'xmlns:atom' => "http://www.w3.org/2005/Atom" do
     xml.language "en-us"
     xml.pubDate Time.now.to_s
     xml.webMaster "#{settings.blog_email} (#{settings.name})"
-    xml.tag! 'atom:link', :href => "http://dallas.example.com/rss.xml", :rel => 'self', :type => 'application/rss+xml'
+    xml.tag! 'atom:link', :href => request.url, :rel => 'self', :type => 'application/rss+xml'
 
     @posts.each do |post|
       xml.item do
