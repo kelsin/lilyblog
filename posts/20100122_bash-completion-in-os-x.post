@@ -1,6 +1,6 @@
 title: Bash Completion in OS X
 tags: bash, apple, os-x
-date: 2010-01-22 12:13:18 -05:00
+date: Fri, 22 Jan 2010 12:13:18 -0500
 
 I realized today that I don't have bash completion turned on in OS X. A quick
 search for the file I'm used to in Ubuntu (/etc/bash_completion) didn't turn up

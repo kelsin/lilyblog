@@ -1,6 +1,6 @@
 title: Install Xmonad on Debian Lenny
 tags: linux, debian, xmonad, xmobar, haskell
-date: 2009-02-23 22:36:07 -05:00
+date: Mon, 23 Feb 2009 22:36:07 -0500
 
 I want to install a newer version of [Xmonad](http://xmonad.org/) than packaged
 with Debian Lenny on my Lenny systems in the cleanest way possible. I tried a

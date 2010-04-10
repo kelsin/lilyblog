@@ -1,6 +1,6 @@
 title: Instant PhpBB3 Speed Improvements
 tags: debian, server, php
-date: 2009-10-02 18:47:56 -04:00
+date: Fri, 02 Oct 2009 18:47:56 -0400
 
 Recently at work we've installed a php accelerator onto one of our php apps. We
 were having load problems on the box ([Moodle](http://moodle.org/) installs) and

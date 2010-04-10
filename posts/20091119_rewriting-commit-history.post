@@ -1,6 +1,6 @@
 title: Rewriting Commit History
 tags: git
-date: 2009-11-19 10:04:26 -05:00
+date: Thu, 19 Nov 2009 10:04:26 -0500
 
 Recently at work I was working on a small bug fix git branch that had MANY small
 commits doing relatively the same thing. I really wanted to go through and clean

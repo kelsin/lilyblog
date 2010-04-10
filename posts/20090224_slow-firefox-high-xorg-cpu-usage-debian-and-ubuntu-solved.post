@@ -1,6 +1,6 @@
 title: Slow Firefox - High Xorg CPU usage - Debian and Ubuntu - SOLVED
 tags: ubuntu, debian, bug, intel-i810, firefox, xorg
-date: 2009-02-24 11:14:06 -05:00
+date: Tue, 24 Feb 2009 11:14:06 -0500
 
 So the past few days I've noticed Firefox (Iceweasel actually) being incredibly
 slow. I don't know if it's more than it was on Ubuntu or not, but it was

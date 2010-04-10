@@ -1,6 +1,6 @@
 title: Git Ignoring already committed (tracked) files
 tags: code, git
-date: 2009-08-05 12:12:00 -04:00
+date: Wed, 05 Aug 2009 12:12:00 -0400
 
 In my current local development environment for work I don't have access to our
 authentication mechanism. Our rails site uses a cookie from our main site. In

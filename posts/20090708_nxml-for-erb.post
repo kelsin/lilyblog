@@ -1,6 +1,6 @@
 title: Nxml for ERB
 tags: emacs, ruby-on-rails
-date: 2009-07-08 08:35:44 -04:00
+date: Wed, 08 Jul 2009 08:35:44 -0400
 
 Being unsatisfied with most erb solutions in Emacs I've been using [nxml-mode](http://www.thaiopensource.com/nxml-mode/) for editing erb
 and just dealing with it complaining about erb sections. I love nxml-mode for

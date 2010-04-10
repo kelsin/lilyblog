@@ -1,6 +1,6 @@
 title: Emacs as a fast $EDITOR
 tags: linux, xmonad, emacs
-date: 2009-02-24 15:27:54 -05:00
+date: Tue, 24 Feb 2009 15:27:54 -0500
 
 I've been using vim as my `$EDITOR` setting for quite some time, and recently
 started using emacsclient. Two things about this setup bothered me. First I
