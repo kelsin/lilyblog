@@ -14,7 +14,7 @@ xml.rss :version => "2.0" do
         xml.link "http://#{settings.blog_domain}#{post_url(post)}"
         xml.guid "http://#{settings.blog_domain}#{post_url(post)}"
         xml.description post.body
-        xml.pubDate post.date
+        xml.pubDate Time.parse(post.date.to_s).to_s
       end
     end
   end
