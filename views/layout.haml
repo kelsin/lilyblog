@@ -28,7 +28,7 @@
         var disqus_developer = 1;
         var disqus_url = 'http://#{settings.blog_domain}#{request.path}';
 
-    - [:reset, :layout, :fonts, :colors, :lightbox, 'themes/twilight'].each do |css|
+    - [:reset, :lilyblog, :lightbox, 'themes/twilight'].each do |css|
       %link{ css_attrs(css) }
 
     - feed_urls.each do |title, href|
