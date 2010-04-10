@@ -1,12 +1,13 @@
 xml.instruct!
-xml.rss :version => "2.0" do
+xml.rss :version => "2.0", 'xmlns:atom' => "http://www.w3.org/2005/Atom" do
   xml.channel do
     xml.title "#{title} - #{settings.blog_name}"
     xml.link @link
     xml.description settings.blog_desc
     xml.language "en-us"
     xml.pubDate Time.now.to_s
-    xml.webMaster settings.blog_email
+    xml.webMaster "#{settings.blog_email} (#{settings.name})"
+    xml.tag! 'atom:link', :href => "http://dallas.example.com/rss.xml", :rel => 'self', :type => 'application/rss+xml'
 
     @posts.each do |post|
       xml.item do
