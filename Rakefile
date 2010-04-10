@@ -29,6 +29,27 @@ task :urls do
   end
 end
 
+namespace :update do
+  desc "Update dates in posts to RFC822"
+  task :dates do
+    LilyBlog::Post.all.each do |post|
+      olddate = post.date.to_s
+      newdate = Time.parse(olddate).rfc822
+
+      if olddate != newdate
+        newfile = ""
+        File.open(post.file, 'r') do |f|
+          newfile = f.read.gsub(/^date: .*$/, "date: #{newdate}")
+        end
+        File.open(post.file, 'w') do |f|
+          f.write(newfile)
+        end
+        puts "Edited #{post.file}"
+      end
+    end
+  end
+end
+
 namespace :images do
   desc "Resizes images to images proper for the web, and places them in /tmp"
   task :create, :image, :name do |t, args|
