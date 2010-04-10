@@ -64,12 +64,13 @@
 (defun lilyblog-add-tag (tag)
   "Adds a tag to the tag string"
   (interactive "sTag: ")
-  (lilyblog-goto-tags)
-  (end-of-line)
-  (delete-horizontal-space)
-  (if (not (equal (char-before) ?:))
-      (insert ","))
-  (insert (format " %s" (lilyblog-clean-tag tag))))
+  (save-excursion
+    (lilyblog-goto-tags)
+    (end-of-line)
+    (delete-horizontal-space)
+    (if (not (equal (char-before) ?:))
+        (insert ","))
+    (insert (format " %s" (lilyblog-clean-tag tag)))))
 
 (defun lilyblog-chomp (str)
   "Chomp leading and tailing whitespace from STR."
@@ -78,7 +79,11 @@
 
 (defun lilyblog-clean-tag (tag)
   "Cleans up a tag string just like ruby does"
-  (lilyblog-chomp (replace-regexp-in-string "[^0-9a-xA-Z_-]+" "_" (downcase tag))))
+  (lilyblog-chomp (replace-regexp-in-string
+                   "\\(^[-_]*\\|[-_]*$\\)" ""
+                   (replace-regexp-in-string
+                    "[^0-9a-xA-Z_-]+" "_"
+                    (downcase tag)))))
 
 (defun lilyblog-run-rake-task (task &rest args)
   "Runs a rake rake in the post directory"
@@ -93,11 +98,12 @@
     task))
 
 ;; Editing Post Functions
-(defun lilyblog-insert-image (file name title)
+(defun lilyblog-insert-image (file title)
   "Inserts an image tag into the current post from a file on the filesystem"
-  (interactive "fImage File: \nsFilename: \nsTitle: ")
-  (lilyblog-run-rake-task "images:create" file name)
-  (let ((images (lilyblog-image-names file name)))
+  (interactive "fImage File: \nsTitle: ")
+  (let ((name (lilyblog-clean-tag title))
+        (images (lilyblog-image-names file name)))
+    (lilyblog-run-rake-task "images:create" file name)
     (lilyblog-copy-image images)
     (lilyblog-image-tag-from-images images title)))
 
