@@ -28,6 +28,13 @@
 ;; Regular expression to find keywords
 (defconst lilyblog-keyword-regexp '("^[a-z]+: "))
 
+;; Date format
+(defconst lilyblog-rfc822 "%a, %d %b %Y %H:%M:%S %z")
+
+;; Regexp to parse a blog post's file name
+(defconst lilyblog-file-regexp
+  "\\([0-9]\\{4\\}\\)\\([0-9][0-9]\\)\\([0-9][0-9]\\)_\\([^\\./]+\\)\\.\\([a-z]\\)+$")
+
 ;; Major Mode line
 (define-derived-mode lilyblog-mode markdown-mode "LilyBlog"
   "A mode to help in editing LilyBlog posts"
@@ -333,15 +340,12 @@ the current name"
   (let ((dates (make-hash-table)))
     (puthash :post
              (replace-regexp-in-string
-              "  +" " " (format-time-string "%A, %B %e, %Y at %l:%M%P"))
+              "  +" " " (format-time-string lilyblog-rfc822))
              dates)
     (puthash :file
              (format-time-string "%Y%m%d")
              dates)
     dates))
-
-(defconst lilyblog-file-regexp
-  "\\([0-9]\\{4\\}\\)\\([0-9][0-9]\\)\\([0-9][0-9]\\)_\\([^\\./]+\\)\\.\\([a-z]\\)+$")
 
 (defun lilyblog-get-post-file ()
   "Gets the current buffers file name without directory"
