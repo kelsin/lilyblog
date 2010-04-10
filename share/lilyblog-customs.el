@@ -48,20 +48,13 @@ blog post."
   :group 'lilyblog
   :type 'string)
 
-(defcustom lilyblog-dev-path "/"
-  "Path on dev server to blog."
+(defcustom lilyblog-dev-url "http://localhost:3000/"
+  "Url for development server"
   :group 'lilyblog
   :type 'string)
 
-(defcustom lilyblog-dev-host "localhost"
-  "This is the host to connect to if you want to view a post
-locally"
-  :group 'lilyblog
-  :type 'string)
-
-(defcustom lilyblog-dev-post "3000"
-  "This is the port of the locally running web server to connect
-to when you want to view a post locally"
+(defcustom lilyblog-prd-url "http://production.blog.com/"
+  "Url for production server"
   :group 'lilyblog
   :type 'string)
 

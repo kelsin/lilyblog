@@ -167,14 +167,15 @@ based on the original filename"
                       (lilyblog-full-image-url (lilyblog-thumb-name images))
                       title))
 
-(defun lilyblog-open-post ()
+(defun lilyblog-open-post (&optional production-site)
   "Saves the current post, and then opens it in a web
 browser. This relies on you running a local server at
 localhost:3000 with your blog running"
-  (interactive)
+  (interactive "P")
   (save-buffer)
-  (let ((current-file (buffer-file-name)))
-    (lilyblog-system-open (lilyblog-dev-url))))
+  (lilyblog-system-open (lilyblog-post-url (if production-site
+                                               lilyblog-prd-url
+                                             lilyblog-dev-url))))
 
 (defun lilyblog-open-github ()
   "Opens the LilyBlog github page"
@@ -359,10 +360,10 @@ the current name"
                            (gethash :day data)) data)
     data))
 
-(defun lilyblog-dev-url ()
-  "Returns the dev url to use for viewing the current post"
+(defun lilyblog-post-url (url)
+  "Attaches post slug onto url"
   (let ((parts (lilyblog-parse-filename)))
-    (concat "http://" lilyblog-dev-host ":" lilyblog-dev-post lilyblog-dev-path
+    (concat url
             (gethash :year parts) "/"
             (gethash :month parts) "/"
             (gethash :day parts) "/"
