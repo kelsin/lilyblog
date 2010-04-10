@@ -4,6 +4,9 @@ set :blog_domain, 'blog.kelsin.net'
 set :blog_email, 'kelsin@valefor.com'
 set :blog_desc, 'Kelsin\'s blog'
 
+# User
+set :name, "Christopher Giroir"
+
 # Analytics
 set :property_id, 'UA-4197984-2'
 
