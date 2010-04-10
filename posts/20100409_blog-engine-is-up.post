@@ -1,0 +1,21 @@
+title: Blog engine is up!
+date: Friday, April 9, 2010 at 5:31pm
+tags: blog, sinatra, ruby, programming, heroku
+
+I've finished my blog engine enough to move my blog over to it! My blog is now
+running on [Heroku](http://www.heroku.com) and is basically a small sinatra app
+that saves posts as flat files. More info can be found at the
+[Github page](http://github.com/Kelsin/lilyblog).
+
+This way you have history for your entire blog, with all edits. You can also
+write your posts in any editor you want. I actually have written about as much
+code for my emacs helpers than I have for the blog engine itself.
+
+The features I cared about most are tagging. I decided to offload comments into
+Disqus. The features there (and the time saving aspect of not having to code
+comments) was worth the slight drawbacks to offloading my comments).
+
+Overall I'm really happy with it. The only thing left is actually styling my
+blog. The current style is NOT going to stay. I'll be going over it with Caitlin
+and coming up with something. I'm hoping to have it be
+[Emacs](http://www.gnu.org/software/emacs/)-themed, but time will tell.
