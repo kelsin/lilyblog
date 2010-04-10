@@ -36,16 +36,17 @@
   (lilyblog-goto-body))
 
 ;; Keybindings
-(define-key lilyblog-mode-map (kbd "C-c g") 'lilyblog-goto-tags)
-(define-key lilyblog-mode-map (kbd "C-c b") 'lilyblog-goto-body)
-(define-key lilyblog-mode-map (kbd "C-c i") 'lilyblog-insert-image)
-(define-key lilyblog-mode-map (kbd "C-c I") 'lilyblog-image-tag)
-(define-key lilyblog-mode-map (kbd "C-c o") 'lilyblog-open-post)
-(define-key lilyblog-mode-map (kbd "C-c h") 'lilyblog-open-github)
-(define-key lilyblog-mode-map (kbd "C-c d") 'lilyblog-update-date)
-(define-key lilyblog-mode-map (kbd "C-c t") 'lilyblog-change-title)
-(define-key lilyblog-mode-map (kbd "C-c p") 'lilyblog-publish)
-(define-key lilyblog-mode-map (kbd "C-c u") 'lilyblog-unpublish)
+(define-key lilyblog-mode-map (kbd "C-c C-g") 'lilyblog-goto-tags)
+(define-key lilyblog-mode-map (kbd "C-c C-a") 'lilyblog-add-tag)
+(define-key lilyblog-mode-map (kbd "C-c C-b") 'lilyblog-goto-body)
+(define-key lilyblog-mode-map (kbd "C-c C-i") 'lilyblog-insert-image)
+(define-key lilyblog-mode-map (kbd "C-c C-I") 'lilyblog-image-tag)
+(define-key lilyblog-mode-map (kbd "C-c C-o") 'lilyblog-open-post)
+(define-key lilyblog-mode-map (kbd "C-c C-h") 'lilyblog-open-github)
+(define-key lilyblog-mode-map (kbd "C-c C-d") 'lilyblog-update-date)
+(define-key lilyblog-mode-map (kbd "C-c C-t") 'lilyblog-change-title)
+(define-key lilyblog-mode-map (kbd "C-c C-p") 'lilyblog-publish)
+(define-key lilyblog-mode-map (kbd "C-c C-u") 'lilyblog-unpublish)
 
 ;; Movement commands
 (defun lilyblog-goto-body ()
@@ -59,6 +60,25 @@
   (interactive)
   (goto-char (point-min))
   (re-search-forward "^tags: "))
+
+(defun lilyblog-add-tag (tag)
+  "Adds a tag to the tag string"
+  (interactive "sTag: ")
+  (lilyblog-goto-tags)
+  (end-of-line)
+  (delete-horizontal-space)
+  (if (not (equal (char-before) ?:))
+      (insert ","))
+  (insert (format " %s" (lilyblog-clean-tag tag))))
+
+(defun lilyblog-chomp (str)
+  "Chomp leading and tailing whitespace from STR."
+  (let ((s (if (symbolp str) (symbol-name str) str)))
+    (replace-regexp-in-string "\\(^[[:space:]\\n]*\\|[[:space:]\\n]*$\\)" "" s)))
+
+(defun lilyblog-clean-tag (tag)
+  "Cleans up a tag string just like ruby does"
+  (lilyblog-chomp (replace-regexp-in-string "[^0-9a-xA-Z_-]+" "_" (downcase tag))))
 
 (defun lilyblog-run-rake-task (task &rest args)
   "Runs a rake rake in the post directory"
@@ -192,8 +212,7 @@ localhost:3000 with your blog running"
                                              (concat "/\\1_"
                                                      (gethash :file new-titles)
                                                      ".")
-                                             current-file))
-         (inhibit-read-only t))
+                                             current-file)))
     (save-excursion
       (goto-char (point-min))
       (perform-replace "^title: .*$"
@@ -219,7 +238,7 @@ localhost:3000 with your blog running"
           (goto-char (point-min))
           (insert "title: " (gethash :post titles) "\n"
                   "date: " (gethash :post dates) "\n"
-                  "tags:\n\n")
+                  "tags: \n\n")
           (after-find-file)))))
 
 (defun lilyblog-edit-post ()
@@ -293,7 +312,11 @@ the current name"
   the slug"
   (let ((titles (make-hash-table)))
     (puthash :post title titles)
-    (puthash :file (replace-regexp-in-string "\[^a-z0-9-\]+" "-" (downcase title)) titles)
+    (puthash :file (replace-regexp-in-string
+                    "\\(^-*\\|-*$\\)" ""
+                    (replace-regexp-in-string
+                     "\[^a-z0-9-\]+" "-"
+                     (downcase title))) titles)
     titles))
 
 (defun lilyblog-dates ()
@@ -302,16 +325,16 @@ the current name"
   while :file refers to the date section of the file name"
   (let ((dates (make-hash-table)))
     (puthash :post
-             (replace-regexp-in-string "  +"
-                                       " "
-                                       (format-time-string "%A, %B %e, %Y at %l:%M%P"))
+             (replace-regexp-in-string
+              "  +" " " (format-time-string "%A, %B %e, %Y at %l:%M%P"))
              dates)
     (puthash :file
              (format-time-string "%Y%m%d")
              dates)
     dates))
 
-(defconst lilyblog-file-regexp "\\([0-9]\\{4\\}\\)\\([0-9][0-9]\\)\\([0-9][0-9]\\)_\\([^\\./]+\\)\\.\\([a-z]\\)+$")
+(defconst lilyblog-file-regexp
+  "\\([0-9]\\{4\\}\\)\\([0-9][0-9]\\)\\([0-9][0-9]\\)_\\([^\\./]+\\)\\.\\([a-z]\\)+$")
 
 (defun lilyblog-get-post-file ()
   "Gets the current buffers file name without directory"
@@ -345,6 +368,7 @@ the current name"
             (gethash :day parts) "/"
             (gethash :slug parts) "/")))
 
+;; Define lilyblog-system-open depending on which operating system we're on
 (cond ((string-match "darwin" (symbol-name system-type))
        (defun lilyblog-system-open (item)
          "Opens an item with open"

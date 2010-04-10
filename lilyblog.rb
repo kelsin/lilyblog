@@ -123,7 +123,7 @@ end
 
 # Single Post
 get %r{^/([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9])/([A-Za-z0-9_-]+)/$} do |year, month, day, slug|
-  @post = LilyBlog::Post.find("#{year}#{month}#{day}_#{slug}")
+  @post = LilyBlog::Post.find("#{year}#{month}#{day}_#{slug}", settings.environment == :development)
 
   haml :post
 end
