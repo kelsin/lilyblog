@@ -1,0 +1,47 @@
+title: Using IDO for bookmarks and recent files
+date: Thu, 22 Apr 2010 14:36:32 -0400
+tags: emacs, programming
+
+I love [Ido mode](http://www.emacswiki.org/emacs/InteractivelyDoThings) in
+emacs. The fuzzy searching works exactly how I want. It automatically works for
+finding files and switching buffers which is great. Today I finally got it
+working for bookmarks and recent files.
+
+For bookmarks I found a
+[section on emacs wiki](http://www.emacswiki.org/emacs/InteractivelyDoThings#toc7)
+about how to make ido goto a bookmark directory when browsing for files. This
+isn't quite what I wanted. I wanted to use ido to complete bookmark names to go
+right to the bookmarks. After finding some example code I came up with this:
+
+    :::lisp
+    (defun bookmark-ido-find-file ()
+      "Find a bookmark using Ido."
+      (interactive)
+      (let ((bm (ido-completing-read "Choose bookmark: "
+                                     (bookmark-all-names)
+                                     nil t)))
+        (when bm
+          (bookmark-jump bm))))
+
+Reallyl simple, just `bookmark-jump` to a bookmark name using
+`bookmark-all-names` to pass the names to `ido-completing-read`.
+
+The next step was to be able to complete on recently seen files. I came up with
+the following. It's probably not the cleanest or fastest code, but it gets the
+job done. It lets me complete on the filename (not directories at all) for all
+recently seen files. I don't know how this behaves when you have files that are
+named the same, but at the moment this works great.
+
+    :::lisp
+    (defun recentf-ido-find-file ()
+      "Find a recent file using Ido."
+      (interactive)
+      (let* ((files (mapcar '(lambda (file)
+                               (cons (file-name-nondirectory file) file))
+                            recentf-list))
+             (file (cdr (assoc (ido-completing-read "Choose recent file: "
+                                                    (mapcar 'car files)
+                                                    nil t)
+                               files))))
+        (when file
+          (find-file file))))
