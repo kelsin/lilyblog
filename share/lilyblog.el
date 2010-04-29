@@ -47,7 +47,7 @@
 (define-key lilyblog-mode-map (kbd "C-c C-a") 'lilyblog-add-tag)
 (define-key lilyblog-mode-map (kbd "C-c C-b") 'lilyblog-goto-body)
 (define-key lilyblog-mode-map (kbd "C-c C-i") 'lilyblog-insert-image)
-(define-key lilyblog-mode-map (kbd "C-c C-I") 'lilyblog-image-tag)
+(define-key lilyblog-mode-map (kbd "C-c C-m") 'lilyblog-image-tag)
 (define-key lilyblog-mode-map (kbd "C-c C-o") 'lilyblog-open-post)
 (define-key lilyblog-mode-map (kbd "C-c C-h") 'lilyblog-open-github)
 (define-key lilyblog-mode-map (kbd "C-c C-d") 'lilyblog-update-date)
@@ -94,8 +94,10 @@
 
 (defun lilyblog-run-rake-task (task &rest args)
   "Runs a rake rake in the post directory"
-  (let ((default-directory (expand-file-name (format "%s/.." (buffer-file-name)))))
-    (process-file "rake" nil nil nil "-f" "Rakefile" (lilyblog-format-rake-task task args))))
+  (let ((default-directory (expand-file-name (format "%s/.." (buffer-file-name))))
+        (rake-args (lilyblog-format-rake-task task args)))
+    (message (format "Running \"rake -f ../Rakefile %s\" from %s" rake-args default-directory))
+    (process-file "rake" nil nil nil "-f" "../Rakefile" rake-args)))
 
 (defun lilyblog-format-rake-task (task &optional args)
   "Returns the name of a rake task from the arguments and task name"
@@ -108,8 +110,9 @@
 (defun lilyblog-insert-image (file title)
   "Inserts an image tag into the current post from a file on the filesystem"
   (interactive "fImage File: \nsTitle: ")
-  (let ((name (lilyblog-clean-tag title))
-        (images (lilyblog-image-names file name)))
+  (let* ((name (lilyblog-clean-tag title))
+         (images (lilyblog-image-names file name)))
+    (message (format "(lilyblog-image-names %s %s) => %s" file name images))
     (lilyblog-run-rake-task "images:create" file name)
     (lilyblog-copy-image images)
     (lilyblog-image-tag-from-images images title)))
@@ -123,6 +126,7 @@ based on the original filename"
 
 (defun lilyblog-image-names (file name)
   "Returns an alist of the two image names"
+  (message (format "Filename: %s\nName: %s" file name))
   (let ((ext (lilyblog-new-extension file)))
     (list (cons 'image (concat name "." ext))
           (cons 'thumb (concat name ".thumbnail." ext)))))
@@ -149,6 +153,7 @@ based on the original filename"
                  folder)))))
 
 (defun lilyblog-copy-file (image folder)
+  (message (format "Copying image:%s to folder:%s" image folder))
   (let ((from (format "/tmp/%s" image))
         (to (concat folder image)))
     (message (format "Copying %s to %s" from to))
@@ -158,9 +163,11 @@ based on the original filename"
   "Copies the image files over to the server"
   (if (y-or-n-p (format "Should we copy images to %s?" (lilyblog-post-image-folder)))
       (let ((folder (lilyblog-create-post-image-folder)))
+        (message (format "Images: %s" images))
         (if folder
             (let ((image (lilyblog-image-name images))
                   (thumb (lilyblog-thumb-name images)))
+              (message (format "Image Filename: %s\nThumbnail Filename: %s" image thumb))
               (lilyblog-copy-file image folder)
               (lilyblog-copy-file thumb folder))))))
 
