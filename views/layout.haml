@@ -28,6 +28,8 @@
         var disqus_developer = 1;
         var disqus_url = 'http://#{settings.blog_domain}#{request.path}';
 
+    %link{ :href => 'http://fonts.googleapis.com/css?family=Vollkorn', :rel => 'stylesheet', :type => 'text/css' }
+
     - [:reset, :lilyblog, :lightbox, 'themes/twilight'].each do |css|
       %link{ css_attrs(css) }
 

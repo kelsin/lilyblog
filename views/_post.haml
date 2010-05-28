@@ -3,7 +3,7 @@
     %a{ :href => post_url(post) }= post.meta[:title]
   %dl.meta
     %dt Date
-    %dd= post.date
+    %dd= DateTime.parse(post.date).strftime "%A, %B %e, %Y at %l:%M %P"
     %dt Tags
     %dd
       -post.tags.each do |tag|

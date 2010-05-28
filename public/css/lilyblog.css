@@ -1,5 +1,5 @@
 /* Main Tags */
-body { font-family: Helvetica, Verdana, sans-serif;
+body { font-family: 'Vollkorn', 'Georgia', 'Times New Roman', serif;
        background-color: #222; color: #ddd; }
 
 a:link, a:visited, a:active, a:hover { text-decoration: none; }
@@ -43,13 +43,13 @@ div.post div.body dl dt, div.post div.body dl dd { float: left; margin: 0.2em 0 
 div.post div.body dl dt { font-weight: bold; clear: left; margin-right: 0.5em; width: 8em; text-align: right; }
 div.post div.body dl dd { width: 30em; }
 
-div.post div.body pre { border-width: 3px; border-style: solid; border-color: #a50;
+div.post div.body pre { border-width: 2px; border-style: solid; border-color: #a50;
                         display: block; overflow: auto;
                         -moz-border-radius: 0.5em; -webkit-border-radius: 0.5em;
                         padding: 0.5em 1em; margin: 1em 3em; line-height: 1.4em; }
 
 /* Images */
-div.post div.body a img { border-width: 3px; border-style: solid; border-color: #a50;
+div.post div.body a img { border-width: 2px; border-style: solid; border-color: #a50;
                           -moz-border-radius: 0.3em; -webkit-border-radius: 0.3em;
                           height: 125px; width: 125px;
                           float: left; margin: 0.5em 1em 0.5em 0; }
