@@ -22,7 +22,7 @@ h4 { font-size: 1.2em; margin: 0.6em 0 0.2em 0; font-weight: bold; }
 #page { width: 40em; margin: 1em auto; position: relative; }
 
 /* Post Meta */
-div.post dl.meta { font-size: 0.9em; margin: 0.5em 0; position: relative; overflow: auto; }
+div.post dl.meta { font-size: 0.9em; margin: 0.5em 0; position: relative; overflow: hidden; }
 div.post dl.meta dt { font-weight: bold; clear: left; float: left; }
 div.post dl.meta dd { float: left; }
 div.post dl.meta dt, div.post dl.meta dd { margin: 0.2em 0.5em 0.2em 0; }
